@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model wallet {
+  id                Int           @id @default(autoincrement())
+  balance           Decimal
+  user              user[]
+  to_transactions   transaction[] @relation("to")
+  from_transactions transaction[] @relation("from")
+}
+
+model user {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  password      String
+  role          String
+  wallet        wallet         @relation(fields: [wallet_id], references: [id])
+  wallet_id     Int
+  user_items    user_items[]
+  announcements announcement[]
+}
+
+model transaction {
+  id                   Int          @id @default(autoincrement())
+  status               String
+  amount               Decimal
+  to                   wallet       @relation("to", fields: [to_id], references: [id])
+  to_id                Int
+  from                 wallet       @relation("from", fields: [from_id], references: [id])
+  from_id              Int
+  announcement         announcement @relation(fields: [announcement_id], references: [id])
+  announcement_id      Int
+  quantity_items_asked Int
+}
+
+model item {
+  id            Int            @id @default(autoincrement())
+  name          String
+  image_url     String
+  user_items    user_items[]
+  announcements announcement[]
+}
+
+model user_items {
+  id       Int  @id @default(autoincrement())
+  user     user @relation(fields: [user_id], references: [id])
+  user_id  Int
+  item     item @relation(fields: [item_id], references: [id])
+  item_id  Int
+  quantity Int
+}
+
+model announcement {
+  id                 Int           @id @default(autoincrement())
+  user               user          @relation(fields: [user_id], references: [id])
+  user_id            Int
+  item               item          @relation(fields: [item_id], references: [id])
+  item_id            Int
+  quantity_available Int
+  status             String
+  value_per_item     Decimal
+  transactions       transaction[]
+}
