@@ -1,10 +1,10 @@
 import { MakeBetsRequestDTO } from "../../dtos/make-bets";
-import { Transaction } from "../../entities/transaction";
 import { Wallet } from "../../entities/wallet";
 import { UserRepository } from "../../repositories/user-repository";
 import { WalletRepository } from "../../repositories/wallet-repository";
 import { decodeToken } from "../../shared/utils/decode-token";
 import { BetStrategy } from "./bet-strategy";
+import { CrashCase } from "./crash-case";
 import { RouletteCase } from "./roulette-case";
 
 export class MakeBets {
@@ -33,6 +33,7 @@ export class MakeBets {
 
         const allBetsTypes = {
             'ROULETTE': RouletteCase,
+            'CRASH': CrashCase,
         };
 
         const newBet = new BetStrategy();
