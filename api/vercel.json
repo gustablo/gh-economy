@@ -2,6 +2,7 @@
     "name": "vercel-typescript-rest-api",
     "version": 2,
     "public": true,
+    "buildCommand": "npx prisma generate",
     "installCommand": "npx prisma generate",
     "builds": [
       {
