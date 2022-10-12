@@ -7,7 +7,7 @@ export  const socket = (server:  http.Server) => {
     io.on('connection', (socket) => {
 
         socket.on('connect', (userId) => {
-            //atualiza no banco - status online, socket_id
+            // atualiza no banco - status online, socket_id
         });
 
         socket.on('disconnect', (userId) => {
@@ -24,7 +24,7 @@ export  const socket = (server:  http.Server) => {
 
             if (accept) {
                 socket.join('nome_da_sala');
-                io.to(chalelenger).emit('join', 'nome_da_sala')
+                io.to(challenger).emit('join', 'nome_da_sala')
             }
         });
 
