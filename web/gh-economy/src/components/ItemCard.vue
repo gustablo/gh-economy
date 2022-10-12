@@ -18,7 +18,7 @@
 
           <div class="d-flex align-center mb-8">
             <img width="28" src="../assets/coin.png" />
-            <span class="ml-1 mt-2">{{ announcement.valuePerItem }}</span>
+            <span class="ml-1 mt-1">{{ announcement.valuePerItem }}</span>
           </div>
 
         </div>
@@ -32,7 +32,7 @@
 
           <div class="d-flex align-center mb-8">
             <img width="28" src="../assets/yield.png" />
-            <span class="ml-1 mt-2">{{ item.yield }}</span>
+            <span class="ml-1 mt-1">{{ item.yield }}</span>
           </div>
         </div>
       </div>
