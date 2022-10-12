@@ -1,5 +1,5 @@
 import { Item } from "../../entities/item";
-import { UserProps } from "../../entities/user";
+import { User, UserProps } from "../../entities/user";
 import { UserItem } from "../../entities/user-item";
 import { Wallet } from "../../entities/wallet";
 import { UserRepository } from "../user-repository";
@@ -82,5 +82,24 @@ export class UserPrismaRepository implements UserRepository {
         status: user.status,
       },
     });
+  }
+
+  async listOnline(userId: number): Promise<User[]> {
+    const users = await prisma.user.findMany({
+      where: {
+        status: 'ONLINE',
+        id: {
+          not: userId,
+        }
+      }
+    });
+
+    return users.map(user => (new User({
+      name: user.name,
+      avatarUrl: user.avatar_url,
+      status: user.status,
+      id: user.id.toString(),
+      socketId: user.socket_id,
+    })));
   }
 }

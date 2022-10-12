@@ -8,12 +8,14 @@ import { Signup } from "../usecases/signup";
 import { SignupRequestDTO } from "../dtos/signup";
 import { SigninRequestDTO } from "../dtos/signin";
 import { CurrentUser } from "../usecases/current-user";
+import { OnlineUsers } from "../usecases/online-users";
 
 export class UserController {
 
     private userRepo = new UserPrismaRepository();
     private siginUseCase = new Signin(this.userRepo);
-    private currentUseCase = new CurrentUser(this.userRepo); 
+    private currentUseCase = new CurrentUser(this.userRepo);
+    private onlineUseCase = new OnlineUsers(this.userRepo);
     private signupUseCase = new Signup(
         this.userRepo,
         new WalletPrismaRepository(),
@@ -23,9 +25,9 @@ export class UserController {
     async sigup(body: SignupRequestDTO): Promise<HttpResponse> {
         try {
             const response = await this.signupUseCase.exec(body);
-            
+
             return commonSuccess(response);
-        } catch(err) {
+        } catch (err) {
             return commonError(err as Error);
         }
     }
@@ -35,7 +37,7 @@ export class UserController {
             const response = await this.siginUseCase.exec(body.name, body.password);
 
             return commonSuccess(response);
-        } catch(err) {
+        } catch (err) {
             return commonError(err as Error);
         }
     }
@@ -45,7 +47,17 @@ export class UserController {
             const result = await this.currentUseCase.exec(token);
 
             return commonSuccess(result);
-        } catch(err) {
+        } catch (err) {
+            return commonError(err as Error);
+        }
+    }
+
+    async listOnline(token: string) {
+        try {
+            const result = await this.onlineUseCase.exec(token);
+
+            return commonSuccess(result);
+        } catch (err) {
             return commonError(err as Error);
         }
     }

@@ -81,6 +81,12 @@ routes.post('/bets', isAuthorized, async (req, res) => {
     return respond(result, res);
 });
 
+routes.get('/users/online', isAuthorized, async (req, res) => {
+    const result = await userController.listOnline(req.headers['authorization']!);
+
+    return respond(result, res);
+})
+
 const respond = (result: HttpResponse, res: Response) => {
     return res.
         status(result.status)
