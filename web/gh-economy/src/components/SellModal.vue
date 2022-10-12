@@ -1,27 +1,18 @@
 <template>
   <v-dialog v-model="dialog" width="500">
-    <v-card>
-      <img :src="item.imageUrl" />
+    <v-card class="sell-card" style="border-radius: 10px !important">
+      <div class="sell-image" :style="{'background-image': 'url(' + item.imageUrl + ')'}" ></div>
 
-      <v-card-actions class="d-flex flex-column sell-actions">
-        <h2 class="mb-8">{{ item.name }}</h2>
+      <v-card-actions class="sell-actions mb-6 d-flex justify-center">
+        <div class="d-flex flex-column text-center">
+          <h2 class="mb-10 mt-4">{{ item.name }}</h2>
 
-        <div class="d-flex">
-          <v-text-field type="number" v-model="valuePerItem" label="Sell each per GH$"></v-text-field>
+          <div class="d-flex sell-inputs align-center">
+            <gh-input :placeholder="'price'" v-model="valuePerItem" :type="'number'" />
+          
+            <v-btn class="sell-modal-btn" @click="sell">sell</v-btn>
+          </div>
         </div>
-        <div class="d-flex align-center negocation-value">
-          <v-btn @click="quantity--" class="mb-4">-</v-btn>
-          <v-text-field
-            type="number"
-            v-model="quantity"
-            :max="item.quantity"
-            min="0"
-            label="Quantity"
-            style="width: 235px"
-          ></v-text-field>
-          <v-btn @click="quantity++" class="mb-4">+</v-btn>
-        </div>
-        <v-btn style="width: 100%" @click="sell" class="mt-6">sell</v-btn>
 
       </v-card-actions>
     </v-card>
@@ -29,17 +20,19 @@
 </template>
 
 <script>
-import {  createAnnouncement} from '../api/announcement';
+import { createAnnouncement } from '../api/announcement';
+import GhInput from './shared/GhInput.vue';
 
 export default {
+  components: { GhInput },
   name: "SellModal",
 
   props: ["dialog", "item"],
 
   data() {
     return {
-      quantity: 0,
-      valuePerItem: 0
+      quantity: 1,
+      valuePerItem: null
     };
   },
 
@@ -58,21 +51,41 @@ export default {
         }
       },
     },
-    quantity: {
-      handler(value, old) {
-        if (value >= 0 && value <= this.item.quantity) {
-          this.quantity = value;
-        } else {
-          this.quantity = old;
-        }
-      },
-    },
   },
 };
 </script>
 
 <style>
-  .negocation-value {
-    gap: 16px;
-  }
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+  font-weight: bold;
+}
+
+.negocation-value {
+  gap: 16px;
+}
+
+.sell-card {
+  border-radius: 10px;
+}
+
+.sell-image {
+  height: 500px;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.sell-modal-btn {
+  background-color: rgb(32, 129, 226);
+  color: white;
+  height: 44px !important;
+  width: 25% !important;
+}
+
+.sell-inputs {
+  gap: 32px;
+}
 </style>

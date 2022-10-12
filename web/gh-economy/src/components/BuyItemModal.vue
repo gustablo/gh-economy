@@ -1,21 +1,24 @@
 <template>
   <v-dialog v-model="dialog" width="500">
-    <v-card>
-      <img :src="item.imageUrl" />
+    <v-card class="buy-modal-card" style="border-radius: 10px !important">
+      <div
+        class="buy-modal-image"
+        :style="{ 'background-image': 'url(' + item.imageUrl + ')' }"
+      ></div>
 
-      <v-card-actions class="d-flex flex-column" style="padding: 16px 16px 16px 16px">
-        <h2 class="mb-8">{{ item.name }}</h2>
+      <v-card-actions class="buy-actions mb-6 d-flex justify-start">
+        <div class="d-flex flex-column text-center align-start ml-10">
+          <h2 class="mb-6 mt-4">{{ item.name }}</h2>
 
-        <v-expansion-panels accordion multiple>
-          <announcement-item
-            v-for="announcement in announcements"
-            :key="announcement.id"
-            :announcement="announcement"
-          />
-        </v-expansion-panels>
+            <announcement-item
+              v-for="announcement in announcements"
+              :key="announcement.id"
+              :announcement="announcement"
+              :item="item"
+            />
+        </div>
       </v-card-actions>
     </v-card>
-
   </v-dialog>
 </template>
 
@@ -56,4 +59,21 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+  font-weight: bold;
+}
+
+.buy-modal-card {
+  border-radius: 10px;
+}
+
+.buy-modal-image {
+  height: 500px;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 </style>

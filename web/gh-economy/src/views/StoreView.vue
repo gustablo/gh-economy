@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex store-cards mt-12 ml-12">
+    <div class="d-flex flex-wrap store-cards mt-12 ml-12 justify-center">
         <item-card v-for="item in items" :key="item.id" :item="item"/>
     </div>
 </template>
@@ -30,6 +30,13 @@ export default {
 
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+  font-weight: bold;
+}
+
     .store-cards {
         gap: 60px;
     }

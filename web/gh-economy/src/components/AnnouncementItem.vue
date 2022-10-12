@@ -1,31 +1,41 @@
 <template>
-  <v-expansion-panel title="">
-    <v-expansion-panel-title>
-      <span
-        >Sold by <b>{{ announcement.user.props.name }}</b></span
-      >
-      <span
-        >&nbsp per <b>GH${{ announcement.valuePerItem }}</b> each</span
-      >
-    </v-expansion-panel-title>
+  <div class="d-flex flex-column align-start">
+    <span
+      >Sold by <b>{{ announcement.user.props.name }}</b></span
+    >
 
-    <v-expansion-panel-text>
-      <div class="d-flex align-center announcement-gap">
-        <v-text-field
-          class="mt-5"
-          type="number"
-          v-model="quantity"
-          :max="announcement.quantityAvailable"
-          label="Quantity"
-          min="0"
-        ></v-text-field>
+    <div class="d-flex">
+      <div class="d-flex flex-column">
+        <span
+          style="font-size: 13px; color: rgb(53, 56, 64) !important"
+          class="mr-2 mt-4"
+          >price</span
+        >
 
-        <v-btn @click="buy">buy</v-btn>
+        <div class="d-flex align-center mb-8">
+          <img width="28" src="../assets/coin.png" />
+          <span class="ml-1 mt-2">{{ announcement.valuePerItem }}</span>
+        </div>
+
+        <v-btn @click="buy" class="btn-buy">buy</v-btn>
       </div>
-    </v-expansion-panel-text>
 
-    <v-divider></v-divider>
-  </v-expansion-panel>
+      <div class="d-flex flex-column ml-12">
+        <span
+          style="font-size: 13px; color: rgb(53, 56, 64) !important"
+          class="mr-2 mt-4"
+          >yield</span
+        >
+
+        <div class="d-flex align-center mb-8">
+          <img width="28" src="../assets/yield.png" />
+          <span class="ml-1 mt-2">{{ item.yield }}</span>
+        </div>
+
+        <v-btn @click="buy" class="btn-buy">buy</v-btn>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -34,11 +44,11 @@ import { ask } from "../api/trade";
 export default {
   name: "AnnouncementItem",
 
-  props: ["announcement"],
+  props: ["announcement", "item"],
 
   data() {
     return {
-      quantity: 0,
+      quantity: 1,
     };
   },
 
@@ -49,23 +59,24 @@ export default {
       );
     },
   },
-
-  watch: {
-    quantity: {
-      handler(value, old) {
-        if (value >= 0 && value <= this.announcement.quantityAvailable) {
-          this.quantity = value;
-        } else {
-          this.quantity = old;
-        }
-      },
-    },
-  },
 };
 </script>
 
 <style scoped>
-.announcement-gap {
-  gap: 16px;
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+  font-weight: bold;
+}
+
+.btn-buy {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  background-color: rgb(32, 129, 226);
+  height: 42px;
+  color: white;
 }
 </style>
