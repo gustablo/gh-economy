@@ -9,6 +9,7 @@ export interface UserProps {
     role: 'CITIZEN' | 'GOVERNMENT' | string;
     wallet: Wallet | undefined;
     userItems?: UserItem[];
+    patrimony: number;
 }
 
 export class User extends Entity<UserProps> {

@@ -15,7 +15,12 @@ export class CurrentUser {
             throw new Error('User not found');
         }
 
+        const patrimony = user.userItems?.reduce((acc, cur) => {
+            return acc + cur.props.buyedPer * cur.props.quantity;
+        }, 0);
+
+        user.patrimony = patrimony || 0;
+
         return user;
     }
 }
-

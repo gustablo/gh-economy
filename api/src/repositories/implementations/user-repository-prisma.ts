@@ -32,6 +32,7 @@ export class UserPrismaRepository implements UserRepository {
         const user = await prisma.user.findFirst({
             include: {
                 wallet: true,
+                user_items: true,
             },
             where: {
                 name,
@@ -53,6 +54,9 @@ export class UserPrismaRepository implements UserRepository {
                 id: user.wallet?.id?.toString(),
                 balance: parseFloat(user.wallet?.balance?.toString()),
             }),
+            userItems: user.user_items.map(userItem => {
+                return new UserItem({ quantity: userItem.quantity, buyedPer: Number(userItem.buyed_per) })
+            })
         }
     }
 
