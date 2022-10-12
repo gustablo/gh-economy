@@ -11,12 +11,16 @@
 
         <div class="d-flex links align-center">
           <div class="wallet-top d-flex align-center" v-if="loggedIn">
-            <img width="28" src="./assets/coin.png" /> 
+            <img width="28" src="./assets/coin.png" />
             <span class="ml-2">{{ wallet }}</span>
-            </div>
+          </div>
 
           <span v-if="loggedIn">
-            <router-link to="/">Bank loan</router-link>
+            <v-tooltip text="Coming soon" location="bottom">
+              <template v-slot:activator="{ props }">
+                <a v-bind="props">Bank loan</a>
+              </template>
+            </v-tooltip>
           </span>
 
           <span v-if="loggedIn">

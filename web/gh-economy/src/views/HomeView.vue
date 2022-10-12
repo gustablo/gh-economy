@@ -3,7 +3,10 @@
     <div class="d-flex justify-space-around" style="width: 100%">
       <v-card outlined shaped class="balance-card pa-3">
         <span class="ml-3">Balance</span>
-        <h2 class="text-center mt-2">GH$ {{ wallet.balance.toFixed(2) }}</h2>
+        <h2 class="text-center mt-3 d-flex align-center justify-center ">
+          <img width="28" src="../assets/coin.png" />
+          <span class="ml-4">{{ wallet.balance.toFixed(2) }}</span>
+        </h2>
       </v-card>
       <v-card elevation="2" outlined shaped class="balance-card pa-3">
         <span class="ml-3">Patrimony</span>
@@ -36,6 +39,12 @@ export default {
 
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+}
+
 .balance-card {
   width: 30%;
   height: 120px;

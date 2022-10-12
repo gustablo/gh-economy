@@ -6,6 +6,7 @@
 
     <div class="d-flex roulette-colors">
       <div
+        id="c"
         v-for="c in colorsList"
         :key="c"
         v-bind:class="{
@@ -46,6 +47,16 @@ export default {
       correctColor: "",
       colorsList: ["GREEN", "RED", "BLACK"],
     };
+  },
+
+  mounted() {
+    const black = document.getElementById('BLACK');
+    const green = document.getElementById('green');
+    const blue = document.getElementById('blue');
+
+    setInterval(() => {
+
+    });
   },
 
   methods: {
@@ -95,18 +106,28 @@ export default {
 </script>
 
 <style scoped>
-    .circle {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    cursor: pointer;
-    }
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-    .roulette-colors {
-    gap: 20px;
-    }
+* {
+  font-family: "Poppins" !important;
+}
 
-    .selected-color {
-    border: 4px solid blue;
+.circle {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+}
+
+.roulette-colors {
+  transition: 0.3s;
+  gap: 20px;
+  width: 100px;
+  position: relative;
+}
+
+.selected-color {
+  border: 4px solid blue;
 }
 </style>

@@ -37,6 +37,8 @@
         </div>
       </div>
 
+      <rarity :item="item"/>
+
       <v-btn
         style="width: 100%"
         class="mt-4 btn-sell"
@@ -55,8 +57,10 @@
 <script>
 import { mapGetters } from "vuex";
 import BuyItemModal from "./BuyItemModal.vue";
+import Rarity from './shared/Rarity.vue';
+
 export default {
-  components: { BuyItemModal },
+  components: { BuyItemModal, Rarity, },
   name: "ItemCard",
 
   props: ["item"],

@@ -1,8 +1,8 @@
 <template>
   <div>
     <form v-if="!loggedIn" class="d-flex justify-center align-center login-form">
-      <v-text-field outlined label="name" type="text" v-model="form.name"> </v-text-field>
-      <v-text-field outlined label="password" type="password" v-model="form.password"> </v-text-field>
+      <gh-input placeholder="name" v-model="form.name"> </gh-input>
+      <gh-input outlined placeholder="password" type="password" v-model="form.password"> </gh-input>
       <v-btn type="button" @click="authenticate" class="btn-login">LogIn</v-btn>
     </form>
   </div>
@@ -11,8 +11,10 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import { sigin } from "../api/auth";
+import GhInput from './shared/GhInput.vue';
 
 export default {
+  components: { GhInput },
   name: "LoginForm",
 
   data() {
@@ -45,16 +47,8 @@ export default {
 <style scoped>
   .login-form {
     width: 500px;
-
     color: white;
-    
     gap: 20px;
-
-    margin-top: 20px;
-  }
-
-  .login-form > .btn-login {
-    margin-top: -20px;
   }
 
 </style>

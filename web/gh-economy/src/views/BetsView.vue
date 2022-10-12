@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-tabs v-model="tab" background-color="primary">
+  <div class="d-flex align-center mt-10 flex-column" style="height:100%">
+    <v-tabs v-model="tab" background-color="primary" class="mb-12">
       <v-tab value="roulette">Roulette</v-tab>
       <v-tab value="crash">Crash</v-tab>
     </v-tabs>
@@ -34,4 +34,9 @@ export default {
 
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+}
 </style>
