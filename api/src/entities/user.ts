@@ -10,6 +10,9 @@ export interface UserProps {
     wallet: Wallet | undefined;
     userItems?: UserItem[];
     patrimony?: number;
+    status?: 'OFFLINE' | 'ONLINE' | string;
+    socketId?: string;
+    avatarUrl?: string;
 }
 
 export class User extends Entity<UserProps> {

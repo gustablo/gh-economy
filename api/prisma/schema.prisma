@@ -27,6 +27,9 @@ model user {
   wallet_id     Int
   user_items    user_items[]
   announcements announcement[]
+  socket_id     String         @default("")
+  status        String         @default("OFFLINE")
+  avatar_url    String         @default("https://bigheads.io/editor/?accessory=tinyGlasses&body=breasts&circleColor=blue&clothing=naked&clothingColor=red&eyebrows=raised&eyes=happy&faceMask=false&faceMaskColor=white&facialHair=none3&graphic=vue&hair=balding&hairColor=pink&hat=none4&hatColor=black&lashes=false&lipColor=red&mask=true&mouth=grin&skinTone=yellow")
 }
 
 model transaction {
@@ -49,7 +52,7 @@ model item {
   user_items    user_items[]
   announcements announcement[]
   yield         Decimal        @default(0)
-  rarity        String @default("LOW")
+  rarity        String         @default("LOW")
 }
 
 model user_items {
