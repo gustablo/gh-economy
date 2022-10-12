@@ -1,6 +1,9 @@
 import 'dotenv/config';
-import { app } from './app';
+import { server } from './app';
+import { socket } from './socket';
 
-app.listen(process.env.PORT || 3000, () => {
+socket(server);
+
+server.listen(process.env.PORT || 3333, () => {
     console.log('Api running');
 });
