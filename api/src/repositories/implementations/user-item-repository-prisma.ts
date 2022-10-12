@@ -46,10 +46,10 @@ export class UserItemPrismaRepository implements UserItemRepository {
             }
         });
 
-        return items.map(({ quantity, item, ...userItem }) => (new UserItem({
+        return items.map(({ quantity, item, buyed_per }) => (new UserItem({
             quantity,
             item: new Item({ id: item.id, imageUrl: item.image_url, name: item.name }),
-            buyedPer: Number(userItem.buyed_per)
+            buyedPer: Number(buyed_per)
         })))
     }
 
