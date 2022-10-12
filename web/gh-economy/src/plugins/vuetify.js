@@ -11,4 +11,5 @@ import 'vuetify/dist/vuetify.css';
 export default createVuetify({
   components,
   directives,
+  
 })

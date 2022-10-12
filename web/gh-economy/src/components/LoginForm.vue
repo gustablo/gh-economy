@@ -5,7 +5,6 @@
       <v-text-field outlined label="password" type="password" v-model="form.password"> </v-text-field>
       <v-btn type="button" @click="authenticate" class="btn-login">LogIn</v-btn>
     </form>
-    <v-btn @click="logout" v-else class="logout">logout</v-btn>
   </div>
 </template>
 
@@ -30,7 +29,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setLoggedIn", "setUser"]),
+    ...mapMutations(["setLoggedIn"]),
     authenticate() {
       sigin(this.form.name, this.form.password).then((result) => {
         localStorage.setItem("token", result.token);
@@ -38,13 +37,6 @@ export default {
         this.form = {};
         window.location.href = '/';
       });
-    },
-
-    logout() {
-      this.setUser({});
-      localStorage.removeItem("token");
-      this.setLoggedIn(false);
-      window.location.reload();
     },
   },
 };

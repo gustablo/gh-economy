@@ -2,16 +2,18 @@
   <v-app>
     <nav>
       <nav class="d-flex align-center nav" dense dark>
-        <v-toolbar-title class="nav-title"
-          ><router-link to="/">GH Economy</router-link></v-toolbar-title
-        >
-
-        <v-spacer></v-spacer>
-
-        <div class="d-flex links">
-          <div style="border: 1px solid white; color: white; padding: 6px 20px 2px 20px" v-if="loggedIn">
-            GH$ {{ wallet }}
+        <v-toolbar-title class="nav-title">
+          <div class="d-flex align-center super-title ml-4">
+            <img width="50" src="./assets/coin.png" />
+            <router-link to="/" class="ml-4">GH Economy</router-link>
           </div>
+        </v-toolbar-title>
+
+        <div class="d-flex links align-center">
+          <div class="wallet-top d-flex align-center" v-if="loggedIn">
+            <img width="28" src="./assets/coin.png" /> 
+            <span class="ml-2">{{ wallet }}</span>
+            </div>
 
           <span v-if="loggedIn">
             <router-link to="/">Bank loan</router-link>
@@ -22,15 +24,58 @@
           </span>
 
           <span v-if="loggedIn">
-            <router-link to="/store">Store</router-link>
+            <v-menu anchor="bottom end" rounded>
+              <template v-slot:activator="{ props }">
+                <div v-bind="props">
+                  <v-tooltip text="My account" location="bottom">
+                    <template v-slot:activator="{ props: tooltip }">
+                      <router-link to="/store">
+                        <router-link to="/wallet">
+                          <v-icon size="28" v-bind="tooltip"
+                            >mdi-account-circle-outline</v-icon
+                          >
+                        </router-link>
+                      </router-link>
+                    </template>
+                  </v-tooltip>
+                </div>
+              </template>
+              <v-card>
+                <v-card-text>
+                  <div class="mx-auto text-center">
+                    <v-btn rounded variant="text"
+                      ><router-link to="/trades">
+                        Negociations
+                      </router-link></v-btn
+                    >
+                    <v-divider class="my-3"></v-divider>
+                    <v-btn @click="logout" class="logout">logout</v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-menu>
           </span>
 
           <span v-if="loggedIn">
-            <router-link to="/trades">Negociations</router-link>
+            <v-tooltip text="Shopping" location="bottom">
+              <template v-slot:activator="{ props }">
+                <router-link to="/store">
+                  <v-icon v-bind="props" size="28">mdi-cart-outline</v-icon>
+                </router-link>
+              </template>
+            </v-tooltip>
           </span>
 
           <span v-if="loggedIn">
-            <router-link to="/wallet">Wallet</router-link>
+            <v-tooltip text="Wallet" location="bottom">
+              <template v-slot:activator="{ props }">
+                <router-link to="/store">
+                  <router-link to="/wallet">
+                    <v-icon size="28" v-bind="props">mdi-wallet-outline</v-icon>
+                  </router-link>
+                </router-link>
+              </template>
+            </v-tooltip>
           </span>
 
           <login-form />
@@ -52,7 +97,13 @@ export default {
   name: "App",
 
   methods: {
-    ...mapMutations(["setUser"]),
+    ...mapMutations(["setUser", "setLoggedIn"]),
+    logout() {
+      this.setUser({});
+      localStorage.removeItem("token");
+      this.setLoggedIn(false);
+      window.location.reload();
+    },
   },
   computed: {
     ...mapGetters(["loggedIn", "user"]),
@@ -60,30 +111,60 @@ export default {
       if (this.user.wallet) {
         return this.user.wallet.props.balance.toFixed(2);
       }
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-  .nav-title {
-    margin-left: 20px;
-  }
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-  .links {
-    gap: 30px;
-    margin-right: 40px;
-  }
+* {
+  font-family: "Poppins" !important;
+}
 
-  a {
-    text-decoration: none;
-    font-size: 20px;
-    color: white;
-  }
+.nav-title {
+  margin-left: 48px;
+}
 
-  .nav {
-    height: 100px;
-    background: #6A76AB;
-  }
+.links {
+  gap: 40px;
+  margin-right: 40px;
+}
 
+.super-title {
+  cursor: pointer;
+}
+
+.super-title a {
+  font-size: 18px;
+}
+
+.wallet-top {
+  border-radius: 12px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+  color: black;
+  padding: 6px 20px 2px 20px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 16px;
+  color: black;
+  font-family: "Poppins" !important;
+  font-weight: bold;
+}
+
+.nav i {
+  font-weight: bold !important;
+}
+
+.nav {
+  height: 100px;
+  height: 72px;
+  box-shadow: rgb(229 232 235) 0px 1px 0px 0px;
+}
 </style>
