@@ -48,6 +48,7 @@ model item {
   image_url     String
   user_items    user_items[]
   announcements announcement[]
+  yield Decimal @default(0)
 }
 
 model user_items {
