@@ -52,6 +52,9 @@ export class UserPrismaRepository implements UserRepository {
       name: user.name,
       role: user.role,
       password: user.password,
+      socketId: user.socket_id,
+      avatarUrl: user.avatar_url,
+      status: user.avatar_url,
       wallet: new Wallet({
         id: user.wallet?.id?.toString(),
         balance: parseFloat(user.wallet?.balance?.toString()),

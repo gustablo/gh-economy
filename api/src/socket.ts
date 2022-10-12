@@ -17,21 +17,22 @@ export  const socket = (server:  http.Server) => {
 
 
         socket.on('ask_bet', (data) => {
-            // const user = userRepository.findBy({ user_id: data.challenged_id });
-            // io.to(user.socket_id).emit('received_bet_challenge', data);
+            // io.to(data.challenged_socket_id).emit('received_bet_challenge', data);
         });
 
         socket.on('answer_challenge', (data) => {
             // data.answer // ACCEPT - DENY
 
             // if (accept) {
-            //     socket.join('nome_da_sala');
-            //     io.to(chalelenger).emit('join', 'nome_da_sala')
+            //     socket.emit('join', 'nome_da_sala')
+            //     io.to(data.chalelenger_id).emit('join', 'nome_da_sala')
             // }
         });
 
         socket.on('join', (nomeDaSala) => {
             socket.join(nomeDaSala);
+
+            socket.emit('redirect_to_room', nomeDaSala);
         })
 
     });
@@ -48,8 +49,7 @@ export  const socket = (server:  http.Server) => {
 // socket.emit('ask_bet', {
 //     bet: 'JOKENPO',
 //     amount: 10.50,
-//     challenged_id: 123 // id do usuario desafiado,
-//     challenger_id: 321 // id do usuraio desafiador,
+//     challenged_id: 123 // socket_id do usuario desafiado,
 // })
 
 
