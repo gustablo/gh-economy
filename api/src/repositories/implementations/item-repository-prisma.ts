@@ -5,7 +5,7 @@ import { ItemRepository, ItemWithAnnouncements } from "../item-repository";
 import { prisma } from "./prisma";
 
 export class ItemPrismaRepository implements ItemRepository {
-    async addItems(userId: string, itemId: number, quantityItemsAsked: number): Promise<void> {
+    async addItems(userId: string, itemId: number, quantityItemsAsked: number, buyedPer: number): Promise<void> {
         const userItem = await prisma.user_items.findFirst({
             where: {
                 user_id: Number(userId),
@@ -18,6 +18,7 @@ export class ItemPrismaRepository implements ItemRepository {
                 where: { id: userItem.id },
                 data: {
                     quantity: userItem.quantity + quantityItemsAsked,
+                    buyed_per: buyedPer,
                 }
             });
 
@@ -29,6 +30,7 @@ export class ItemPrismaRepository implements ItemRepository {
                 item_id: itemId,
                 user_id: Number(userId),
                 quantity: quantityItemsAsked,
+                buyed_per: buyedPer,
             }
         });
     }

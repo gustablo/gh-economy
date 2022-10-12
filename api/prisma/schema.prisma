@@ -57,6 +57,7 @@ model user_items {
   item     item @relation(fields: [item_id], references: [id])
   item_id  Int
   quantity Int
+  buyed_per Decimal @default(0)
 }
 
 model announcement {

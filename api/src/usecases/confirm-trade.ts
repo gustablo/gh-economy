@@ -62,6 +62,7 @@ export class ConfirmTrade {
             userToReceiveItems!.id!,
             announcement.item.props.id!,
             transaction.quantityItemsAsked,
+            announcement.valuePerItem,
         );
 
         await this.walletRepository.update(from.id!, from.balance);

@@ -7,6 +7,7 @@ export interface UserItemProps {
     userId: number;
     itemId: number;
     quantity: number;
+    buyedPer: number;
 
     item?: Item;
     user?: User;
