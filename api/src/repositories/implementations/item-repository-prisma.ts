@@ -67,6 +67,7 @@ export class ItemPrismaRepository implements ItemRepository {
             imageUrl: item.image_url,
             name: item.name,
             yield: Number(item.yield),
+            rarity: item.rarity,
             announcements: item.announcements.map(announcement => {
                 const instance = new Announcement({
                     id: announcement.id,
@@ -109,6 +110,7 @@ export class ItemPrismaRepository implements ItemRepository {
             name: item.name,
             imageUrl: item.image_url,
             yield: Number(item.yield),
+            rarity: item.rarity,
             announcements: item.announcements.map(announcement => ({
                 id: announcement.id,
                 status: announcement.status,

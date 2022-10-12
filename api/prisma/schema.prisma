@@ -48,16 +48,17 @@ model item {
   image_url     String
   user_items    user_items[]
   announcements announcement[]
-  yield Decimal @default(0)
+  yield         Decimal        @default(0)
+  rarity        String @default("LOW")
 }
 
 model user_items {
-  id       Int  @id @default(autoincrement())
-  user     user @relation(fields: [user_id], references: [id])
-  user_id  Int
-  item     item @relation(fields: [item_id], references: [id])
-  item_id  Int
-  quantity Int
+  id        Int     @id @default(autoincrement())
+  user      user    @relation(fields: [user_id], references: [id])
+  user_id   Int
+  item      item    @relation(fields: [item_id], references: [id])
+  item_id   Int
+  quantity  Int
   buyed_per Decimal @default(0)
 }
 

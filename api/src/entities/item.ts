@@ -5,6 +5,7 @@ export interface ItemProps {
     name: string;
     imageUrl: string;
     yield: number;
+    rarity: 'LOW' | 'MEDIUM' | 'HIGH' | 'LEGENDARY' | string;
 }
 
 export class Item extends Entity<ItemProps> {
