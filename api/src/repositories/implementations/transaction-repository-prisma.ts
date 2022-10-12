@@ -51,7 +51,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 id: announcement.id,
                 quantityAvailable: announcement.quantity_available,
                 status: announcement.status,
-                valuePerItem: Number(announcement.value_per_item.toString),
+                valuePerItem: Number(announcement.value_per_item.toString()),
                 item: new Item({ id: announcement.item_id }),
                 user: new User({ id: announcement.user_id.toString() }),
             }),

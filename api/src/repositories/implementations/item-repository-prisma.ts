@@ -18,7 +18,7 @@ export class ItemPrismaRepository implements ItemRepository {
                 where: { id: userItem.id },
                 data: {
                     quantity: userItem.quantity + quantityItemsAsked,
-                    buyed_per: buyedPer,
+                    buyed_per: buyedPer, //TODO: trocar para preco médio
                 }
             });
 
