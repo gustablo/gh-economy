@@ -25,7 +25,7 @@
         <div class="d-flex align-center" style="margin-top: -8px; margin-bottom: 42px">
           <img width="22" src="../assets/coin.png" />
           <span style="margin-top: 0.8px; margin-left: 4px; font-size: 16px"
-            >{{ }}</span
+            >{{ item.buyedPer }}</span
           >
         </div>
 
