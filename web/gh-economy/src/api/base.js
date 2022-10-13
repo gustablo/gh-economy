@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: process.env.VITE_API_ENDPOINT,
+    baseURL: import.meta.env.VITE_API_ENDPOINT,
     headers: {
         authorization: localStorage.getItem('token'),
         'Content-Type': 'application/json',
