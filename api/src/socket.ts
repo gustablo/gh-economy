@@ -2,56 +2,47 @@ import { Server as ServerIO } from 'socket.io';
 import http from 'http';
 import { UserPrismaRepository } from './repositories/implementations/user-repository-prisma';
 
-export  const socket = (server:  http.Server) => {
-    const io = new ServerIO(server);
+export const socket = (server: http.Server) => {
+    const io = new ServerIO(server, {
+        cors: {
+            origin: '*'
+        }
+    });
+
     const userRepository = new UserPrismaRepository();
-    
+
     io.on('connection', (socket) => {
-        socket.on('connect', async (userId) => {
+        socket.on('user_connected', async (userId) => {
             await userRepository.update({ socketId: socket.id, status: "ONLINE" }, Number(userId));
-            
-            socket.on('disconnect', async (reason) => {
-                await userRepository.update({ status: "OFFLINE" }, Number(userId));
+
+            socket.on('disconnect', async (_) => {
+                await userRepository.update({ status: "OFFLINE", socketId: '' }, Number(userId));
             });
         });
 
 
         socket.on('ask_bet', (data) => {
-            // io.to(data.challenged_socket_id).emit('received_bet_challenge', data);
+            io.to(data.challengedId).emit('received_bet_challenge', {
+                amount: data.amount,
+                game: data.game,
+                challengerId: socket.id,
+            });
         });
+
+        // bets
+        // user_id1, user_id2, game, amount, winner_id, hour
+        // /game/5
 
         socket.on('answer_challenge', (data) => {
             // data.answer // ACCEPT - DENY
 
-            // if (accept) {
-            //     socket.emit('join', 'nome_da_sala')
-            //     io.to(data.chalelenger_id).emit('join', 'nome_da_sala')
-            // }
+            if (data.answer === 'ACCEPT') {
+                // const bet = criarbet
+                io.to([data.challengerId, socket.id]).emit('redirect_to_game', bet.id);
+            } else {
+                io.to(data.challengerId).emit('peidou');
+            }
+
         });
-
-        socket.on('join', (nomeDaSala) => {
-            socket.join(nomeDaSala);
-
-            socket.emit('redirect_to_room', nomeDaSala);
-        })
-
     });
 }
-
-// socket.on('received_bet_challenge')
-
-// io.to().emit('answer_challenge', {
-//     answer: 'ACCEPT',
-//     challenged_id: 123,
-//     challenger_id: 321,
-// })
-
-// socket.emit('ask_bet', {
-//     bet: 'JOKENPO',
-//     amount: 10.50,
-//     challenged_id: 123 // socket_id do usuario desafiado,
-// })
-
-
-// migration - add status, add picture_url, socket_id
-// get all all users online (endpoint)

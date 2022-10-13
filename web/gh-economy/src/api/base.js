@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3333',
+    baseURL: process.env.VUE_APP_BASE_URL,
     headers: {
         authorization: localStorage.getItem('token'),
         'Content-Type': 'application/json',
