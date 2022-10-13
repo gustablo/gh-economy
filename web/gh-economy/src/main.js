@@ -8,7 +8,7 @@ import { loadFonts } from './plugins/webfontloader'
 import VueSocketIO from 'vue-3-socket.io'
 import SocketIO from 'socket.io-client'
 
-const socketConnection = SocketIO('http://localhost:3333');
+const socketConnection = SocketIO(import.meta.env.VITE_SOCKET_ENDPOINT);
 
 const socket = new VueSocketIO({
   debug: true,
