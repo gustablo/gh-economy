@@ -89,6 +89,7 @@
 
     <v-main>
       <router-view />
+      <receive-challenge :dialog="receiveChallengeModal" :bet="receiveChallengeBet" @onclose="receiveChallengeModal = !receiveChallengeModal" />
     </v-main>
   </v-app>
 </template>
@@ -96,9 +97,38 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import LoginForm from "./components/LoginForm.vue";
+import ReceiveChallenge from './components/ReceiveChallenge.vue';
+
 export default {
-  components: { LoginForm },
-  name: "App",
+  components: {
+    LoginForm,
+    ReceiveChallenge,
+  },
+
+  sockets: {
+    connect: function () {},
+    received_bet_challenge: function (data) {
+      this.receiveChallengeModal = true;
+      this.receiveChallengeBet = data;
+    },
+  },
+
+  data() {
+    return {
+      receiveChallengeModal: null,
+      receiveChallengeBet: {},
+    }
+  },
+
+  watch: {
+    'user': {
+      handler(v) {
+        if (v && v.id) {
+          this.$socket.emit('user_connected', v.id);
+        }
+      }
+    }
+  },
 
   methods: {
     ...mapMutations(["setUser", "setLoggedIn"]),
@@ -106,6 +136,7 @@ export default {
       this.setUser({});
       localStorage.removeItem("token");
       this.setLoggedIn(false);
+      this.$socket.disconnect();
       window.location.reload();
     },
   },

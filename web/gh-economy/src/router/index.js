@@ -60,7 +60,6 @@ router.beforeEach(async (guard, from, next) => {
   if (token && isEmpty(user)) {
     try {
       const response = await current();
-
       store.commit('setUser', response);
     } catch (err) {
       localStorage.removeItem('token');

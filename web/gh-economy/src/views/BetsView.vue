@@ -1,34 +1,24 @@
 <template>
-  <div class="d-flex align-center mt-10 flex-column" style="height:100%">
-    <v-tabs v-model="tab" background-color="primary" class="mb-12">
-      <v-tab value="roulette">Roulette</v-tab>
-      <v-tab value="crash">Crash</v-tab>
-    </v-tabs>
-    <v-window v-model="tab">
-      <v-window-item value="roulette">
-        <roulette />
-      </v-window-item>
-
-      <v-window-item value="crash">
-        <crash/>
-      </v-window-item>
-    </v-window>
+  <div>
+    <div @click="startGame()">HEADS OR TAILS</div>
+    <choose-players-modal :dialog="dialog" @onclose="dialog = !dialog"/>
   </div>
 </template>
 
 <script>
-import Crash from '../components/Bets/Crash.vue';
-import Roulette from "../components/Bets/Roulette.vue";
-
+import ChoosePlayersModal from "../components/ChoosePlayersModal.vue";
 export default {
-  components: {
-    Roulette,
-    Crash,
-  },
+  components: { ChoosePlayersModal },
 
   data: () => ({
-    tab: null,
+    dialog: null,
   }),
+
+  methods: {
+    startGame() {
+      this.dialog = true;
+    },
+  },
 };
 </script>
 

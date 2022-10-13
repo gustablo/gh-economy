@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://gh-economy-api.vercel.app',
+    baseURL: 'http://localhost:3333',
     headers: {
         authorization: localStorage.getItem('token'),
         'Content-Type': 'application/json',

@@ -21,6 +21,6 @@ export const store = createStore({
       },
       setLoggedIn(state, loggedIn) {
         state.loggedIn = loggedIn;
-      }
+      },
     }
 });
