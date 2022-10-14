@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "heroku-postbuild": "cd api && npm install && npm run build && cd dist && node server.js"
+    "heroku-prebuild": "cd api && npm install && npm run build && cd dist"
   },
   "repository": {
     "type": "git",
