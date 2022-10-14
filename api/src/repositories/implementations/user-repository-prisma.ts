@@ -29,7 +29,7 @@ export class UserPrismaRepository implements UserRepository {
   }
 
   async findBy(conditions: any): Promise<UserProps | null> {
-    const { name, id, role, wallet_id, password } = conditions;
+    const { name, id, role, wallet_id, password, socket_id } = conditions;
 
     const user = await prisma.user.findFirst({
       include: {
@@ -42,6 +42,7 @@ export class UserPrismaRepository implements UserRepository {
         role,
         wallet_id: wallet_id ? Number(wallet_id) : undefined,
         password,
+        socket_id,
       },
     });
 

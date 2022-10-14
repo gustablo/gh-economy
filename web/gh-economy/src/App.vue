@@ -110,6 +110,11 @@ export default {
     received_bet_challenge: function (data) {
       this.receiveChallengeModal = true;
       this.receiveChallengeBet = data;
+
+      this.setCurrentBet({
+        step: 0,
+        id: data.betId,
+      });
     },
     redirect_to_game: function (betId) {
       this.$router.push({ name: "bet_game", params: { id: betId } });
@@ -160,6 +165,10 @@ export default {
         step: 4,
       })
     },
+    update_wallet: function(newBalance) {
+      this.user.wallet.props.balance = newBalance
+      this.setUser(this.user);
+    }
   },
 
   data() {

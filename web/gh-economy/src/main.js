@@ -13,6 +13,7 @@ const socketConnection = SocketIO(import.meta.env.VITE_SOCKET_ENDPOINT);
 const socket = new VueSocketIO({
   debug: true,
   connection: socketConnection,
+
   vuex: {
     store,
     actionPrefix: 'SOCKET_',

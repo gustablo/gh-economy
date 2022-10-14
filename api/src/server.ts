@@ -1,10 +1,14 @@
 import 'dotenv/config';
-import { server } from './app';
+import { app } from './app';
 import { socket } from './socket';
+import http from 'http';
 
-socket(server);
+const server = http.createServer(app);
+const io = socket(server);
 
-server.listen(process.env.PORT || 9784, () => {
+app.set('io', io);
+
+server.listen(process.env.PORT || 1040, () => {
     console.log('Api running');
 });
 

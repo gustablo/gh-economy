@@ -32,6 +32,7 @@ export default {
       this.$socket.emit("answer_challenge", {
         answer,
         challengerId: this.bet.challengerId,
+        betId: this.bet.betId,
       });
     },
   },

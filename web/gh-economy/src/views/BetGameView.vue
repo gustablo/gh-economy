@@ -43,6 +43,7 @@ export default {
       this.$socket.emit("made_choice", {
         choice,
         challengerId: this.currentBet.challengerId,
+        betId: this.currentBet.id,
       });
       this.showChoice = false;
     },
