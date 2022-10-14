@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/gustablo/gh-economy/issues"
   },
-  "homepage": "https://github.com/gustablo/gh-economy#readme"
+  "homepage": "https://github.com/gustablo/gh-economy#readme",
+  "dependencies": {
+    "typescript": "^4.8.4"
+  }
 }
