@@ -44,6 +44,12 @@ const router = createRouter({
       component: () => import('../views/BetsView.vue'),
       beforeEnter: (guard, from, next) => canActive(guard, from, next),
     },
+    {
+      path: '/game/:id',
+      name: 'bet_game',
+      component: () => import('../views/BetGameView.vue'),
+      beforeEnter: (guard, from, next) => canActive(guard, from, next),
+    },
   ]
 })
 

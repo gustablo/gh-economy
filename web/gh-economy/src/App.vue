@@ -111,6 +111,9 @@ export default {
       this.receiveChallengeModal = true;
       this.receiveChallengeBet = data;
     },
+    redirect_to_game: function (betId) {
+      this.$router.push({ name: 'bet_game', params: { id: betId } });
+    },
   },
 
   data() {

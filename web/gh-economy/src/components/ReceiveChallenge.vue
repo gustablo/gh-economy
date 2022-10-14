@@ -1,11 +1,23 @@
 <template>
-  <v-dialog v-model="dialog" width="500">
-    <v-card>
-      <h2>VOCE RECEBEU UM CONVITE DE APOSTA DE {{ bet.challengerId }}</h2>
-      <span>de R${{ bet.amount }}</span>
-      <span> no jogo {{ bet.game }}</span>
+  <v-dialog v-model="dialog" width="350">
+    <v-card style="border-radius: 10px !important" class="pa-4">
+      <h3>{{ bet.challengerName }} challenged you to a game!</h3>
+      <div class="d-flex flex-column mt-6" style="gap: 8px">
+        <span class="d-flex align-center"
+          ><b>bet value:</b> <img width="18" class="ml-2 mr-1" src="../assets/coin.png" />
+          <b style="margin-top: 1px">{{ bet.amount }}</b></span
+        >
+        <span><b>game:</b> {{ bet.game }}</span>
+      </div>
 
-      <v-btn @click="answerBet()">ACCEPT</v-btn>
+      <v-divider class="mt-6" ></v-divider>
+
+      <v-card-actions>
+        <div class="d-flex justify-end mt-2" style="width: 100%; gap: 16px">
+          <v-btn @click="answerBet('DENY')" style="background: red" class="receive-btn">DENY</v-btn>
+          <v-btn @click="answerBet('ACCEPT')" class="receive-btn">ACCEPT</v-btn>
+        </div>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -15,11 +27,11 @@ export default {
   props: ["dialog", "bet"],
 
   methods: {
-    answerBet() {
-        this.$socket.emit('answer_challenge', {
-            answer: 'ACCEPT',
-            challengerId: this.bet.challengerId,
-        })
+    answerBet(answer) {
+      this.$socket.emit("answer_challenge", {
+        answer,
+        challengerId: this.bet.challengerId,
+      });
     },
   },
 
@@ -35,5 +47,15 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+}
+
+.receive-btn {
+  background-color: rgb(32, 129, 226);
+  color: white;
+}
 </style>
