@@ -1,0 +1,21 @@
+{
+  "name": "gh-economy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "heroku-postbuild": "cd api && npm install && npm run build && cd dist && node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gustablo/gh-economy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gustablo/gh-economy/issues"
+  },
+  "homepage": "https://github.com/gustablo/gh-economy#readme"
+}

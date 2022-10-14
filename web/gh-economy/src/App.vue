@@ -33,13 +33,9 @@
                 <div v-bind="props">
                   <v-tooltip text="My account" location="bottom">
                     <template v-slot:activator="{ props: tooltip }">
-                      <router-link to="/store">
-                        <router-link to="/wallet">
-                          <v-icon size="28" v-bind="tooltip"
-                            >mdi-account-circle-outline</v-icon
-                          >
-                        </router-link>
-                      </router-link>
+                      <v-icon size="28" v-bind="tooltip"
+                        >mdi-account-circle-outline</v-icon
+                      >
                     </template>
                   </v-tooltip>
                 </div>
@@ -92,13 +88,8 @@
       <receive-challenge
         :dialog="receiveChallengeModal"
         :bet="receiveChallengeBet"
-        @onclose="receiveChallengeModal = !receiveChallengeModal"
+        @onclose="receiveChallengeModal = false"
       />
-      <h1>{{ intialText }}</h1>
-      <div v-if="showChoice">
-        <v-btn @click="makeChoice(0)">heads</v-btn>
-        <v-btn @click="makeChoice(1)">tails</v-btn>
-      </div>
     </v-main>
   </v-app>
 </template>
@@ -122,28 +113,52 @@ export default {
     },
     redirect_to_game: function (betId) {
       this.$router.push({ name: "bet_game", params: { id: betId } });
+
+      this.setCurrentBet({
+        id: betId,
+        step: 0,
+      });
     },
     make_choice: function (challenger) {
-      console.log("dsalkjdslakjdsalkdsakjdsadaks");
-      this.intialText = "Heads or Tails?";
-      this.showChoice = true;
-      this.challengerId = challenger;
+      this.setCurrentBet({
+        challengerId: challenger,
+        isChallenger: false,
+        step: 1
+      });
     },
     enemy_making_choice: function () {
-      this.intialText = "Waiting for enemy make the choice...";
+      this.setCurrentBet({
+        isChallenger: true,
+        step: 1,
+      });
+    },
+    start_game: function() {
+      this.setCurrentBet({
+        step: 2,
+      });
     },
     enemy_made_choice: function (choice) {
-      const headsOrTails = choice == 0 ? "heads" : "tails";
-      this.intialText = `enemy choose ${headsOrTails}`;
+      this.setCurrentBet({
+        enemyChoice: choice == 0 ? "heads" : "tails",
+      });
     },
     game_result: function (result) {
-      this.intialText = "the result was " + result == 0 ? "heads" : "tails";
+      this.setCurrentBet({
+        result: result == 0 ? "heads" : "tails",
+        step: 3,
+      });
     },
     you_win: function () {
-      this.intialText = "you win";
+      this.setCurrentBet({
+        win: true,
+        step: 4,
+      })
     },
     you_lose: function () {
-      this.intialText = "you lose";
+      this.setCurrentBet({
+        win: false,
+        step: 4,
+      })
     },
   },
 
@@ -151,9 +166,6 @@ export default {
     return {
       receiveChallengeModal: null,
       receiveChallengeBet: {},
-      intialText: "game starting...",
-      showChoice: false,
-      challengerId: null,
     };
   },
 
@@ -168,14 +180,7 @@ export default {
   },
 
   methods: {
-    makeChoice(choice) {
-      this.$socket.emit("made_choice", {
-        choice,
-        challengerId: this.challengerId,
-      });
-      this.showChoice = false;
-    },
-    ...mapMutations(["setUser", "setLoggedIn"]),
+    ...mapMutations(["setUser", "setLoggedIn", 'setCurrentBet']),
     logout() {
       this.setUser({});
       localStorage.removeItem("token");

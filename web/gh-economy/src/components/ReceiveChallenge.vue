@@ -28,6 +28,7 @@ export default {
 
   methods: {
     answerBet(answer) {
+      this.$emit('onclose');
       this.$socket.emit("answer_challenge", {
         answer,
         challengerId: this.bet.challengerId,
