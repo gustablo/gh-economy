@@ -89,7 +89,16 @@
 
     <v-main>
       <router-view />
-      <receive-challenge :dialog="receiveChallengeModal" :bet="receiveChallengeBet" @onclose="receiveChallengeModal = !receiveChallengeModal" />
+      <receive-challenge
+        :dialog="receiveChallengeModal"
+        :bet="receiveChallengeBet"
+        @onclose="receiveChallengeModal = !receiveChallengeModal"
+      />
+      <h1>{{ intialText }}</h1>
+      <div v-if="showChoice">
+        <v-btn @click="makeChoice(0)">heads</v-btn>
+        <v-btn @click="makeChoice(1)">tails</v-btn>
+      </div>
     </v-main>
   </v-app>
 </template>
@@ -97,7 +106,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import LoginForm from "./components/LoginForm.vue";
-import ReceiveChallenge from './components/ReceiveChallenge.vue';
+import ReceiveChallenge from "./components/ReceiveChallenge.vue";
 
 export default {
   components: {
@@ -112,7 +121,29 @@ export default {
       this.receiveChallengeBet = data;
     },
     redirect_to_game: function (betId) {
-      this.$router.push({ name: 'bet_game', params: { id: betId } });
+      this.$router.push({ name: "bet_game", params: { id: betId } });
+    },
+    make_choice: function (challenger) {
+      console.log("dsalkjdslakjdsalkdsakjdsadaks");
+      this.intialText = "Heads or Tails?";
+      this.showChoice = true;
+      this.challengerId = challenger;
+    },
+    enemy_making_choice: function () {
+      this.intialText = "Waiting for enemy make the choice...";
+    },
+    enemy_made_choice: function (choice) {
+      const headsOrTails = choice == 0 ? "heads" : "tails";
+      this.intialText = `enemy choose ${headsOrTails}`;
+    },
+    game_result: function (result) {
+      this.intialText = "the result was " + result == 0 ? "heads" : "tails";
+    },
+    you_win: function () {
+      this.intialText = "you win";
+    },
+    you_lose: function () {
+      this.intialText = "you lose";
     },
   },
 
@@ -120,20 +151,30 @@ export default {
     return {
       receiveChallengeModal: null,
       receiveChallengeBet: {},
-    }
+      intialText: "game starting...",
+      showChoice: false,
+      challengerId: null,
+    };
   },
 
   watch: {
-    'user': {
+    user: {
       handler(v) {
         if (v && v.id) {
-          this.$socket.emit('user_connected', v.id);
+          this.$socket.emit("user_connected", v.id);
         }
-      }
-    }
+      },
+    },
   },
 
   methods: {
+    makeChoice(choice) {
+      this.$socket.emit("made_choice", {
+        choice,
+        challengerId: this.challengerId,
+      });
+      this.showChoice = false;
+    },
     ...mapMutations(["setUser", "setLoggedIn"]),
     logout() {
       this.setUser({});
