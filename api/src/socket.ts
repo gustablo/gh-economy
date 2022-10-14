@@ -5,7 +5,9 @@ import { UserPrismaRepository } from './repositories/implementations/user-reposi
 export const socket = (server: http.Server) => {
     const io = new ServerIO(server, {
         cors: {
-            origin: '*'
+            origin: '*',
+            methods: ["GET", "POST"],
+            credentials: true,
         }
     });
 
