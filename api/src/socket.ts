@@ -26,6 +26,7 @@ export const socket = (server: http.Server) => {
                 amount: data.amount,
                 game: data.game,
                 challengerId: socket.id,
+                challengerName: data.challengerName,
             });
         });
 
@@ -38,10 +39,11 @@ export const socket = (server: http.Server) => {
 
             if (data.answer === 'ACCEPT') {
                 // const bet = criarbet
-                io.to([data.challengerId, socket.id]).emit('redirect_to_game', bet.id);
-            } else {
-                io.to(data.challengerId).emit('peidou');
-            }
+               io.to([data.challengerId, socket.id]).emit('redirect_to_game', 1);
+               return;
+            } 
+
+            io.to(data.challengerId).emit('peidou');
 
         });
     });
