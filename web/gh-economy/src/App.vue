@@ -18,13 +18,35 @@
           <span v-if="loggedIn">
             <v-tooltip text="Coming soon" location="bottom">
               <template v-slot:activator="{ props }">
-                <a v-bind="props">Bank loan</a>
+                <a v-bind="props">Rankings</a>
               </template>
             </v-tooltip>
           </span>
 
           <span v-if="loggedIn">
             <router-link to="/bets">Bets</router-link>
+          </span>
+
+          <span v-if="loggedIn">
+            <v-tooltip text="Shopping" location="bottom">
+              <template v-slot:activator="{ props }">
+                <router-link to="/store">
+                  <v-icon v-bind="props" size="28">mdi-cart-outline</v-icon>
+                </router-link>
+              </template>
+            </v-tooltip>
+          </span>
+
+          <span v-if="loggedIn">
+            <v-tooltip text="Wallet" location="bottom">
+              <template v-slot:activator="{ props }">
+                <router-link to="/store">
+                  <router-link to="/wallet">
+                    <v-icon size="28" v-bind="props">mdi-wallet-outline</v-icon>
+                  </router-link>
+                </router-link>
+              </template>
+            </v-tooltip>
           </span>
 
           <span v-if="loggedIn">
@@ -54,28 +76,6 @@
                 </v-card-text>
               </v-card>
             </v-menu>
-          </span>
-
-          <span v-if="loggedIn">
-            <v-tooltip text="Shopping" location="bottom">
-              <template v-slot:activator="{ props }">
-                <router-link to="/store">
-                  <v-icon v-bind="props" size="28">mdi-cart-outline</v-icon>
-                </router-link>
-              </template>
-            </v-tooltip>
-          </span>
-
-          <span v-if="loggedIn">
-            <v-tooltip text="Wallet" location="bottom">
-              <template v-slot:activator="{ props }">
-                <router-link to="/store">
-                  <router-link to="/wallet">
-                    <v-icon size="28" v-bind="props">mdi-wallet-outline</v-icon>
-                  </router-link>
-                </router-link>
-              </template>
-            </v-tooltip>
           </span>
 
           <login-form />
@@ -128,7 +128,7 @@ export default {
       this.setCurrentBet({
         challengerId: challenger,
         isChallenger: false,
-        step: 1
+        step: 1,
       });
     },
     enemy_making_choice: function () {
@@ -137,7 +137,7 @@ export default {
         step: 1,
       });
     },
-    start_game: function() {
+    start_game: function () {
       this.setCurrentBet({
         step: 2,
       });
@@ -157,18 +157,18 @@ export default {
       this.setCurrentBet({
         win: true,
         step: 4,
-      })
+      });
     },
     you_lose: function () {
       this.setCurrentBet({
         win: false,
         step: 4,
-      })
+      });
     },
-    update_wallet: function(newBalance) {
-      this.user.wallet.props.balance = newBalance
+    update_wallet: function (newBalance) {
+      this.user.wallet.props.balance = newBalance;
       this.setUser(this.user);
-    }
+    },
   },
 
   data() {
@@ -189,7 +189,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setUser", "setLoggedIn", 'setCurrentBet']),
+    ...mapMutations(["setUser", "setLoggedIn", "setCurrentBet"]),
     logout() {
       this.setUser({});
       localStorage.removeItem("token");

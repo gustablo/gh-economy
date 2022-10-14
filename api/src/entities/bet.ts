@@ -6,6 +6,7 @@ export interface BetProps {
 
     challenger: User;
     challenged: User;
+    winner?: User;
     game: string;
     amount: number;
 }

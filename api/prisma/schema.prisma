@@ -32,6 +32,7 @@ model user {
   avatar_url     String         @default("https://bigheads.io/editor/?accessory=tinyGlasses&body=breasts&circleColor=blue&clothing=naked&clothingColor=red&eyebrows=raised&eyes=happy&faceMask=false&faceMaskColor=white&facialHair=none3&graphic=vue&hair=balding&hairColor=pink&hat=none4&hatColor=black&lashes=false&lipColor=red&mask=true&mouth=grin&skinTone=yellow")
   bet_challenger bet[]          @relation("challenger")
   bet_challenged bet[]          @relation("challenged")
+  bet_winner     bet[]          @relation("winner")
 }
 
 model transaction {
@@ -86,6 +87,9 @@ model bet {
 
   challenged    user @relation("challenged", fields: [challenged_id], references: [id])
   challenged_id Int
+
+  winner    user? @relation("winner", fields: [winner_id], references: [id])
+  winner_id Int?
 
   game   String
   amount Decimal
