@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "suatiaejgotsa",
+    "start": "node server.js",
     "heroku-postbuild": "cd api && npm install && npm run build && cd dist"
   },
   "repository": {
