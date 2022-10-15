@@ -20,7 +20,7 @@ export default {
     },
 
     data: () => ({
-        timeout: 2000000,
+        timeout: 2000,
     }),
 
     methods: {

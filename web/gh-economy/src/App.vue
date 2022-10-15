@@ -55,7 +55,7 @@
                 <div v-bind="props">
                   <v-tooltip text="My account" location="bottom">
                     <template v-slot:activator="{ props: tooltip }">
-                      <v-icon size="28" v-bind="tooltip"
+                      <v-icon style="cursor: pointer" size="28" v-bind="tooltip"
                         >mdi-account-circle-outline</v-icon
                       >
                     </template>
