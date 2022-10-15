@@ -11,12 +11,20 @@ export const store = createStore({
     currentBet(state) {
       return state.currentBet;
     },
+    snackbar(state) {
+      return state.snackbar;
+    }
   },
   state() {
     return {
       user: {},
       loggedIn: false,
       currentBet: {},
+      snackbar: {
+        open: false,
+        text: '',
+        color: 'error',
+      }
     }
   },
   mutations: {
@@ -28,6 +36,9 @@ export const store = createStore({
     },
     setCurrentBet(state, bet) {
       state.currentBet = { ...state.currentBet, ...bet };
+    },
+    setSnackbar(state, snackbar) {
+      state.snackbar = { ...state.snackbar, ...snackbar };
     }
   }
 });

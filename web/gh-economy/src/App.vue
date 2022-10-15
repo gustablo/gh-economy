@@ -90,6 +90,7 @@
         :bet="receiveChallengeBet"
         @onclose="receiveChallengeModal = false"
       />
+      <snackbar />
     </v-main>
   </v-app>
 </template>
@@ -98,11 +99,14 @@
 import { mapGetters, mapMutations } from "vuex";
 import LoginForm from "./components/LoginForm.vue";
 import ReceiveChallenge from "./components/ReceiveChallenge.vue";
+import Snackbar from "./components/shared/Snackbar.vue";
+import { coin } from "./constants/coin";
 
 export default {
   components: {
     LoginForm,
     ReceiveChallenge,
+    Snackbar,
   },
 
   sockets: {
@@ -144,12 +148,12 @@ export default {
     },
     enemy_made_choice: function (choice) {
       this.setCurrentBet({
-        enemyChoice: choice == 0 ? "heads" : "tails",
+        enemyChoice: coin[choice],
       });
     },
     game_result: function (result) {
       this.setCurrentBet({
-        result: result == 0 ? "heads" : "tails",
+        result: coin[result],
         step: 3,
       });
     },

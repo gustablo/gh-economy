@@ -23,12 +23,24 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 export default {
   props: ["dialog", "bet"],
 
+  computed: {
+    ...mapGetters(['user']),
+  },
+
   methods: {
+    ...mapMutations(['setSnackbar']),
+
     answerBet(answer) {
       this.$emit('onclose');
+
+      if (answer === 'ACCEPT' && Number(this.bet.amount) > Number(this.user.wallet.props.balance)) {
+        return this.setSnackbar({ open: true, text: 'You do not have coins enough' });
+      }
+
       this.$socket.emit("answer_challenge", {
         answer,
         challengerId: this.bet.challengerId,

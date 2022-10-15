@@ -8,7 +8,7 @@
             <template v-slot:activator="{ props }">
               <div
                 v-bind="props"
-                @click="makeChoice(0)"
+                @click="makeChoice('heads')"
                 class="heads-img choice-img"
                 :style="{
                   cursor: currentBet.isChallenger ? 'auto' : 'pointer',
@@ -26,7 +26,7 @@
                 :style="{
                   cursor: currentBet.isChallenger ? 'auto' : 'pointer',
                 }"
-                @click="makeChoice(1)"
+                @click="makeChoice('tails')"
                 class="tails-img choice-img"
               ></div>
             </template>
@@ -35,12 +35,23 @@
       </div>
     </div>
 
-    <div v-if="currentBet.step == 2">
-      <div v-if="currentBet.isChallenger">
-        <span>enemy choose {{ currentBet.enemyChoice }}</span>
-      </div>
-
-      <span>the game will start soon...</span>
+    <div
+      v-if="currentBet.step == 2"
+      class="h-full d-flex flex-column justify-center align-center"
+    >
+      <div
+        :class="{
+          'side-a': true,
+          [(currentBet.isChallenger
+            ? coinMap[oppositeChoice]
+            : coinMap[myChoice]) + '-img']: true,
+          'choice-img': true,
+          'h-full': true,
+          'd-flex': true,
+          'justify-center': true,
+          'align-center': true,
+        }"
+      ></div>
     </div>
 
     <div
@@ -53,8 +64,17 @@
       </div>
     </div>
 
-    <div v-if="currentBet.step == 4" class="h-full d-flex flex-column justify-center align-center">
-      <div :class="{ 'side-a': true, [currentBet.result + '-img']: true, 'choice-img': true }"></div>
+    <div
+      v-if="currentBet.step == 4"
+      class="h-full d-flex flex-column justify-center align-center"
+    >
+      <div
+        :class="{
+          'side-a': true,
+          [currentBet.result + '-img']: true,
+          'choice-img': true,
+        }"
+      ></div>
       <span v-if="currentBet.win">congratulations you win!</span>
       <span v-else>you are a fucking loser</span>
     </div>
@@ -63,6 +83,8 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import { coin } from "../constants/coin";
+
 export default {
   computed: {
     ...mapGetters(["currentBet"]),
@@ -74,22 +96,37 @@ export default {
 
       return "Select heads or tails";
     },
+    oppositeChoice() {
+      return Number(this.invertedCoinObj[this.currentBet.enemyChoice]) * -1 + 1;
+    },
+    invertedCoinObj() {
+      return Object.keys(coin).reduce((acc, cur) => {
+        acc[coin[cur]] = cur;
+
+        return acc;
+      }, {});
+    },
   },
 
-  mounted() {
-  },
+  mounted() {},
+
+  data: () => ({
+    coinMap: coin,
+    myChoice: null,
+  }),
 
   methods: {
     ...mapMutations(["setCurrentBet"]),
     makeChoice(choice) {
       if (this.currentBet.isChallenger) return;
 
+      this.myChoice = this.invertedCoinObj[choice];
+
       this.$socket.emit("made_choice", {
-        choice,
+        choice: this.myChoice,
         challengerId: this.currentBet.challengerId,
         betId: this.currentBet.id,
       });
-      this.showChoice = false;
     },
   },
 };

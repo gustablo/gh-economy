@@ -8,7 +8,7 @@ const io = socket(server);
 
 app.set('io', io);
 
-server.listen(process.env.PORT || 1040, () => {
+server.listen(process.env.PORT || 3009, () => {
     console.log('Api running');
 });
 

@@ -20,7 +20,6 @@ export const socket = (server: http.Server) => {
     const betRepository = new BetRepositoryPrisma();
 
     io.on('connection', (socket) => {
-        console.log('connected');
         socket.on('user_connected', async (userId) => {
             await userRepository.update({ socketId: socket.id, status: "ONLINE" }, Number(userId));
 
@@ -37,7 +36,6 @@ export const socket = (server: http.Server) => {
                 challenger: new User({ id: '1' }),
                 game: 'HEADS_OR_TAILS',
             });
-
 
             io.to(data.challengedId).emit('received_bet_challenge', {
                 amount: data.amount,

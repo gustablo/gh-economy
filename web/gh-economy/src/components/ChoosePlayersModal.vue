@@ -16,6 +16,7 @@
                   class="avatar-game"
                   :style="{
                     'background-image': 'url(' + user.props.avatarUrl + ')',
+                    'border': isSelected(user) ? '2px solid black': '',
                   }"
                   v-bind="props"
                 ></div>
@@ -43,10 +44,8 @@
         </div>
 
         <div v-else class="d-flex justify-space-evenly align-center">
-          <span><b>Waiting opponent accept your challenge</b></span>
-          <v-progress-circular
-            indeterminate
-          ></v-progress-circular>
+          <span><b>Waiting {{ selectedUser.props.name }} accept your challenge</b></span>
+          <v-progress-circular indeterminate></v-progress-circular>
         </div>
       </div>
     </v-card>
@@ -54,7 +53,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from "vuex";
 import { fetchOnlineUsers } from "../api/user";
 import GhInput from "./shared/GhInput.vue";
 
@@ -72,11 +71,31 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(["user"]),
   },
 
   methods: {
+    ...mapMutations(["setSnackbar"]),
+
     bet() {
+      if (!this.amount || this.amount < 0) {
+        return this.setSnackbar({
+          open: true,
+          text: "Amount must be greather than 0",
+        });
+      }
+
+      if (Number(this.amount) > Number(this.user.wallet.props.balance)) {
+        return this.setSnackbar({
+          open: true,
+          text: "You do not have enough coins",
+        });
+      }
+
+      if (!this.selectedUser.props.socketId) {
+        return this.setSnackbar({ open: true, text: "Select an opponent" });
+      }
+
       this.$socket.emit("ask_bet", {
         game: "HEADS_OR_TAILS",
         amount: this.amount,
@@ -96,6 +115,10 @@ export default {
       handler(v) {
         if (!v) {
           this.$emit("onclose");
+          if (!this.loading) {
+            this.amount = null;
+            this.selectedUser = { props: { name: "" } };
+          }
         } else {
           fetchOnlineUsers().then((users) => (this.onlineUsers = users));
         }
