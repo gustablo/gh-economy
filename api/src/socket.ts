@@ -72,6 +72,8 @@ export const socket = (server: http.Server) => {
             const userWinner = await userRepository.findBy({ socket_id: winner });
             const userLoser = await userRepository.findBy({ socket_id: loser });
 
+            await sleep(2000);
+
             io.to([socket.id, data.challengerId]).emit('game_result', headsOrTails);
 
             userWinner?.wallet?.add(bet!.amount);
