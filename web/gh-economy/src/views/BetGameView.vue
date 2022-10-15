@@ -36,8 +36,8 @@
     </div>
 
     <div
-      v-if="currentBet.step == 2"
-      class="h-full d-flex flex-column justify-center align-center"
+      :style="{ display: currentBet.step == 2 ? 'flex' : 'none' }"
+      class="h-full flex-column justify-center align-center"
     >
       <div class="d-flex justify-center align-center h-full flex-column">
         <div class="d-flex align-center justify-center" style="gap: 52px">
@@ -50,10 +50,7 @@
       </div>
     </div>
 
-    <div
-      v-if="currentBet.step == 3"
-      class="h-full d-flex justify-center align-center"
-    >
+    <div v-if="currentBet.step == 3" class="h-full d-flex justify-center align-center">
       <div id="coin" :class="currentBet.result">
         <div class="side-a heads-img"></div>
         <div class="side-b tails-img"></div>
@@ -76,7 +73,7 @@
 </template>
 
 <script>
-import { nextTick } from '@vue/runtime-core';
+import { nextTick } from "@vue/runtime-core";
 import { mapGetters, mapMutations } from "vuex";
 import { coin } from "../constants/coin";
 
@@ -103,10 +100,6 @@ export default {
     },
   },
 
-  mounted() {
-
-  },
-
   data: () => ({
     coinMap: coin,
     myChoice: null,
@@ -125,20 +118,21 @@ export default {
         betId: this.currentBet.id,
       });
     },
-    startAnimation(coinElement, elementToHidden, operation) {
-      let [initial] = coinElement.style.marginLeft.split('px');
+    async sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    },
+    async startAnimation(coinElement, elementToHidden, operation) {
+      let initial = 0;
       let opacity = 1;
 
-      const interval = setInterval(() => {
-        initial = operation == 'sub' ? (initial - 10) : (Number(initial) + 10);
-        opacity = opacity - 0.1;
-        coinElement.style.marginLeft = Number(initial) + 'px';
+      while (initial >= -350) {
+        coinElement.style[operation == 'sub' ? 'marginLeft' : 'marginRight'] = Number(initial) + "px";
         elementToHidden.style.opacity = opacity;
+        initial = Number(initial) - 10;
+        opacity = opacity - 0.1;
 
-        if ((operation == 'sub' && initial == -350) || (operation == 'add' && initial == 350) ) {
-          clearInterval(interval);
-        }
-      }, 10);
+        await this.sleep(10);
+      }
     },
   },
 
@@ -147,39 +141,42 @@ export default {
       handler(v) {
         nextTick(() => {
           console.log(v);
-        })
-      }
+        });
+      },
     },
     "currentBet.step": {
       handler(v) {
         if (v == 2) {
-          setTimeout(() => { //trocar para nexttick
+          setTimeout(() => {
+            //trocar para nexttick
             const head = document.getElementById("head-coin");
             const tail = document.getElementById("tail-coin");
-  
+
+            head.style.opacity = '1';
+            tail.style.opacity = '1';
+            head.style.marginLeft = '0px';
+            tail.style.marginLeft = '0px';
+            head.style.marginRight = '0px';
+            tail.style.marginRight = '0px';
+
             if (!head || !tail) return;
-  
+
             document.getElementById("or").style.visibility = "hidden";
-  
+
             if (this.currentBet.isChallenger) {
               if (this.currentBet.enemyChoice == "tails") {
-                this.startAnimation(head, tail, 'add');
-              }
-  
-              if (this.currentBet.enemyChoice == "heads") {
-                this.startAnimation(tail, head, 'sub');
+                this.startAnimation(head, tail, "add");
+              } else if (this.currentBet.enemyChoice == "heads") {
+                this.startAnimation(tail, head, "sub");
               }
               return;
             }
-  
-            if (this.myChoice == 1) {
-              this.startAnimation(tail, head, 'sub');
-            }
-  
-            if (this.myChoice == 0) {
-              this.startAnimation(head, tail, 'add');
-            }
 
+            if (this.myChoice == 1) {
+              this.startAnimation(tail, head, "sub");
+            } else if (this.myChoice == 0) {
+              this.startAnimation(head, tail, "add");
+            }
           }, 10);
         }
       },
