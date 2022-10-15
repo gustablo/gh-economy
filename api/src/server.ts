@@ -11,11 +11,3 @@ app.set('io', io);
 server.listen(process.env.PORT || 3009, () => {
     console.log('Api running');
 });
-
-process.once('SIGUSR2', function () {
-    process.kill(process.pid, 'SIGUSR2');
-});
-
-process.on('SIGINT', function () {
-    process.kill(process.pid, 'SIGINT');
-});
