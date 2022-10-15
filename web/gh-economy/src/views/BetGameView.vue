@@ -153,7 +153,7 @@ export default {
     "currentBet.step": {
       handler(v) {
         if (v == 2) {
-          setTimeout(() => {
+          setTimeout(() => { //trocar para nexttick
             const head = document.getElementById("head-coin");
             const tail = document.getElementById("tail-coin");
   
@@ -180,7 +180,7 @@ export default {
               this.startAnimation(head, tail, 'add');
             }
 
-          }, 100);
+          }, 10);
         }
       },
     },
