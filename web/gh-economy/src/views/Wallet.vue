@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-wrap wallet-cards mt-12 ml-12 justify-center">
+  <div class="d-flex flex-wrap wallet-cards mt-12 ml-12 justify-center mb-16">
     <v-card
       v-for="item in items"
       :key="item.id"
@@ -14,22 +14,41 @@
         class="d-flex flex-column wallet-actions-card align-start"
       >
         <b>{{ item.name }}</b>
-        <div class="d-flex align-center">
-          <span
-            style="font-size: 13px; color: rgb(53, 56, 64) !important"
-            class="mr-2"
-            >price</span
-          >
+
+        <div class="d-flex">
+          <div class="d-flex flex-column">
+            <span
+              style="font-size: 13px; color: rgb(53, 56, 64) !important"
+              class="mr-2 mt-4"
+              >price</span
+            >
+
+            <div class="d-flex align-center mb-8">
+              <img width="28" src="../assets/coin.png" />
+              <span class="ml-1 mt-1">{{ item.buyedPer }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column ml-6">
+            <span
+              style="font-size: 13px; color: rgb(53, 56, 64) !important"
+              class="mr-2 mt-4"
+              >yield</span
+            >
+
+            <div class="d-flex align-center mb-8">
+              <img width="28" src="../assets/yield.png" />
+              <span class="ml-1 mt-1">{{ item.yield }}</span>
+            </div>
+          </div>
         </div>
 
-        <div class="d-flex align-center" style="margin-top: -8px; margin-bottom: 42px">
-          <img width="22" src="../assets/coin.png" />
-          <span style="margin-top: 0.8px; margin-left: 4px; font-size: 16px"
-            >{{ item.buyedPer }}</span
-          >
-        </div>
+        <rarity :item="item" />
 
-        <v-btn style="width: 100%" class="mt-4 btn-sell" @click="openSellModal(item)"
+        <v-btn
+          style="width: 100%"
+          class="mt-4 btn-sell"
+          @click="openSellModal(item)"
           >Sell</v-btn
         >
       </v-card-actions>
@@ -38,6 +57,7 @@
       :dialog="dialog"
       :item="selectedItem"
       @onclose="dialog = !dialog"
+      @onsell="fetchMyItems()"
     />
   </div>
 </template>
@@ -46,10 +66,12 @@
 import { mapGetters } from "vuex";
 import { myItems } from "../api/item";
 import SellModal from "../components/SellModal.vue";
+import Rarity from '../components/shared/Rarity.vue';
 
 export default {
   components: {
     SellModal,
+    Rarity,
   },
   data() {
     return {
@@ -80,7 +102,9 @@ export default {
 
   methods: {
     fetchMyItems() {
-      myItems(this.user.id).then((result) => (this.userItems = this.shuffleArray(result)));
+      myItems(this.user.id).then(
+        (result) => (this.userItems = this.shuffleArray(result))
+      );
     },
     shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -136,17 +160,17 @@ export default {
 }
 
 .btn-sell {
-    transform: translateY(100%);
-    transition: 0.3s;
-    position: absolute;
-    bottom: 0;
-    background-color: rgb(32, 129, 226);
-    color: white;
-    left: 0;
+  transform: translateY(100%);
+  transition: 0.3s;
+  position: absolute;
+  bottom: 0;
+  background-color: rgb(32, 129, 226);
+  color: white;
+  left: 0;
 }
 
 .wallet-card:hover .btn-sell {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .wallet-img {

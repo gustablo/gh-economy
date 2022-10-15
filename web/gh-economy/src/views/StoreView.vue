@@ -16,6 +16,7 @@ export default {
             items: [],
         }
     },
+
     methods: {
         fetchItems() {
             getItems()

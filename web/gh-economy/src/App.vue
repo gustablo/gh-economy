@@ -157,16 +157,18 @@ export default {
         step: 3,
       });
     },
-    you_win: function () {
+    you_win: function (amountWon) {
       this.setCurrentBet({
         win: true,
         step: 4,
+        amountWon,
       });
     },
-    you_lose: function () {
+    you_lose: function (amountLost) {
       this.setCurrentBet({
         win: false,
         step: 4,
+        amountLost,
       });
     },
     update_wallet: function (newBalance) {

@@ -2,8 +2,8 @@
   <div class="h-full">
     <div v-if="currentBet.step == 1" class="h-full">
       <div class="d-flex justify-center align-center h-full flex-column">
-        <h1 style="margin-top: -60px">{{ initialText }}</h1>
-        <div class="d-flex align-center justify-center mt-16" style="gap: 52px">
+        <h1 style="margin-top: -48px">{{ initialText }}</h1>
+        <div class="d-flex align-center justify-center" style="gap: 52px">
           <v-tooltip location="left" text="Heads">
             <template v-slot:activator="{ props }">
               <div
@@ -39,19 +39,15 @@
       v-if="currentBet.step == 2"
       class="h-full d-flex flex-column justify-center align-center"
     >
-      <div
-        :class="{
-          'side-a': true,
-          [(currentBet.isChallenger
-            ? coinMap[oppositeChoice]
-            : coinMap[myChoice]) + '-img']: true,
-          'choice-img': true,
-          'h-full': true,
-          'd-flex': true,
-          'justify-center': true,
-          'align-center': true,
-        }"
-      ></div>
+      <div class="d-flex justify-center align-center h-full flex-column">
+        <div class="d-flex align-center justify-center" style="gap: 52px">
+          <div class="heads-img choice-img" id="head-coin"></div>
+
+          <h1 id="or"><b>OR</b></h1>
+
+          <div class="tails-img choice-img" id="tail-coin"></div>
+        </div>
+      </div>
     </div>
 
     <div
@@ -75,13 +71,12 @@
           'choice-img': true,
         }"
       ></div>
-      <span v-if="currentBet.win">congratulations you win!</span>
-      <span v-else>you are a fucking loser</span>
     </div>
   </div>
 </template>
 
 <script>
+import { nextTick } from '@vue/runtime-core';
 import { mapGetters, mapMutations } from "vuex";
 import { coin } from "../constants/coin";
 
@@ -108,7 +103,9 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+
+  },
 
   data: () => ({
     coinMap: coin,
@@ -127,6 +124,65 @@ export default {
         challengerId: this.currentBet.challengerId,
         betId: this.currentBet.id,
       });
+    },
+    startAnimation(coinElement, elementToHidden, operation) {
+      let [initial] = coinElement.style.marginLeft.split('px');
+      let opacity = 1;
+
+      const interval = setInterval(() => {
+        initial = operation == 'sub' ? (initial - 10) : (Number(initial) + 10);
+        opacity = opacity - 0.1;
+        coinElement.style.marginLeft = Number(initial) + 'px';
+        elementToHidden.style.opacity = opacity;
+
+        if ((operation == 'sub' && initial == -350) || (operation == 'add' && initial == 350) ) {
+          clearInterval(interval);
+        }
+      }, 10);
+    },
+  },
+
+  watch: {
+    "currentBet.win": {
+      handler(v) {
+        nextTick(() => {
+          console.log(v);
+        })
+      }
+    },
+    "currentBet.step": {
+      handler(v) {
+        if (v == 2) {
+          setTimeout(() => {
+            const head = document.getElementById("head-coin");
+            const tail = document.getElementById("tail-coin");
+  
+            if (!head || !tail) return;
+  
+            document.getElementById("or").style.visibility = "hidden";
+  
+            if (this.currentBet.isChallenger) {
+              if (this.currentBet.enemyChoice == "tails") {
+                this.startAnimation(head, tail, 'add');
+              }
+  
+              if (this.currentBet.enemyChoice == "heads") {
+                this.startAnimation(tail, head, 'sub');
+              }
+              return;
+            }
+  
+            if (this.myChoice == 1) {
+              this.startAnimation(tail, head, 'sub');
+            }
+  
+            if (this.myChoice == 0) {
+              this.startAnimation(head, tail, 'add');
+            }
+
+          }, 100);
+        }
+      },
     },
   },
 };

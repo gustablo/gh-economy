@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { store } from '../store';
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_ENDPOINT,
@@ -12,7 +13,7 @@ api.interceptors.response.use(result => {
     return result;
 }, error => {
     const message = error.response.data;
-    alert(message);
+    store.commit('setSnackbar', { open: true, text: message });
     throw error;
 });
 

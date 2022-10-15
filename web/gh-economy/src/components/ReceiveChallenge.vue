@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="350">
+  <v-dialog v-model="dialog" width="350" persistent>
     <v-card style="border-radius: 10px !important" class="pa-4">
       <h3>{{ bet.challengerName }} challenged you to a game!</h3>
       <div class="d-flex flex-column mt-6" style="gap: 8px">

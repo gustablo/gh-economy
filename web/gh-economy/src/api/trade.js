@@ -1,7 +1,7 @@
 import { api } from './base';
 
-export const ask = async (announcementId, quantityItemsAsked) => {
-    const response = await api.post('/trades/ask', { announcementId, quantityItemsAsked });
+export const ask = async (announcementId, quantityItemsAsked, proposal) => {
+    const response = await api.post('/trades/ask', { announcementId, quantityItemsAsked, proposal });
 
     return response.data;
 };

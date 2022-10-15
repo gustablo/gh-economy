@@ -16,8 +16,6 @@
           <img width="28" src="../assets/coin.png" />
           <span class="ml-1 mt-2">{{ announcement.valuePerItem }}</span>
         </div>
-
-        <v-btn @click="buy" class="btn-buy">buy</v-btn>
       </div>
 
       <div class="d-flex flex-column ml-12">
@@ -31,17 +29,27 @@
           <img width="28" src="../assets/yield.png" />
           <span class="ml-1 mt-2">{{ item.yield }}</span>
         </div>
-
-        <v-btn @click="buy" class="btn-buy">buy</v-btn>
       </div>
+    </div>
+
+    <v-divider style="width: 100%; margin-left: -7px" class="mb-4"></v-divider>
+
+    <div class="d-flex buy-inputs align-center">
+
+      <gh-input :placeholder="'proposal'" v-model="proposal" :type="'number'" />
+
+      <v-btn class="btn-buy" @click="buy">send</v-btn>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import { ask } from "../api/trade";
+import GhInput from './shared/GhInput.vue';
 
 export default {
+  components: { GhInput },
   name: "AnnouncementItem",
 
   props: ["announcement", "item"],
@@ -49,14 +57,20 @@ export default {
   data() {
     return {
       quantity: 1,
+      proposal: null,
     };
   },
 
   methods: {
+    ...mapMutations(["setSnackbar"]),
     buy() {
-      ask(this.announcement.id, this.quantity).then(() =>
-        alert("operation successfully")
-      );
+      ask(this.announcement.id, this.quantity, this.proposal).then(() => {
+        this.setSnackbar({
+          open: true,
+          color: "success",
+          text: "proposal successfully, wait user accept",
+        });
+      });
     },
   },
 };
@@ -71,12 +85,14 @@ export default {
 }
 
 .btn-buy {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  left: 0;
   background-color: rgb(32, 129, 226);
-  height: 42px;
   color: white;
+  height: 44px !important;
+  width: 25% !important;
+}
+
+.buy-inputs {
+  gap: 32px;
+  margin-left: -16px;
 }
 </style>

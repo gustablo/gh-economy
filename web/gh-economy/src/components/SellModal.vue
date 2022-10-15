@@ -1,27 +1,34 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <v-card class="sell-card" style="border-radius: 10px !important">
-      <div class="sell-image" :style="{'background-image': 'url(' + item.imageUrl + ')'}" ></div>
+      <div
+        class="sell-image"
+        :style="{ 'background-image': 'url(' + item.imageUrl + ')' }"
+      ></div>
 
       <v-card-actions class="sell-actions mb-6 d-flex justify-center">
         <div class="d-flex flex-column text-center">
           <h2 class="mb-10 mt-4">{{ item.name }}</h2>
 
           <div class="d-flex sell-inputs align-center">
-            <gh-input :placeholder="'price'" v-model="valuePerItem" :type="'number'" />
-          
+            <gh-input
+              :placeholder="'price'"
+              v-model="valuePerItem"
+              :type="'number'"
+            />
+
             <v-btn class="sell-modal-btn" @click="sell">sell</v-btn>
           </div>
         </div>
-
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import { createAnnouncement } from '../api/announcement';
-import GhInput from './shared/GhInput.vue';
+import { mapMutations } from 'vuex';
+import { createAnnouncement } from "../api/announcement";
+import GhInput from "./shared/GhInput.vue";
 
 export default {
   components: { GhInput },
@@ -32,15 +39,20 @@ export default {
   data() {
     return {
       quantity: 1,
-      valuePerItem: null
+      valuePerItem: null,
     };
   },
 
   methods: {
+    ...mapMutations(['setSnackbar']),
     sell() {
-        createAnnouncement(this.item.id, this.quantity, this.valuePerItem)
-            .then(() => alert('sales order created'))
-    }
+      createAnnouncement(this.item.id, this.quantity, this.valuePerItem).then(
+        () => {
+          this.setSnackbar({ open: true, text: 'Item announced successfully', color: 'success' });
+          this.$emit('onsell');
+        }
+      );
+    },
   },
 
   watch: {
@@ -48,6 +60,7 @@ export default {
       handler(v) {
         if (!v) {
           this.$emit("onclose");
+          this.valuePerItem = null;
         }
       },
     },

@@ -72,8 +72,6 @@ export const socket = (server: http.Server) => {
             const userWinner = await userRepository.findBy({ socket_id: winner });
             const userLoser = await userRepository.findBy({ socket_id: loser });
 
-            await sleep(2000);
-
             io.to([socket.id, data.challengerId]).emit('game_result', headsOrTails);
 
             userWinner?.wallet?.add(bet!.amount);
@@ -84,10 +82,10 @@ export const socket = (server: http.Server) => {
 
             await sleep(5000);
 
-            io.to(winner).emit('you_win');
+            io.to(winner).emit('you_win', bet?.amount);
             io.to(winner).emit('update_wallet', userWinner?.wallet?.props.balance);
 
-            io.to(loser).emit('you_lose');
+            io.to(loser).emit('you_lose', bet?.amount);
             io.to(loser).emit('update_wallet', userLoser?.wallet?.props.balance);
         });
     });

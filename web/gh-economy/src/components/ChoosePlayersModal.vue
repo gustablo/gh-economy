@@ -78,7 +78,7 @@ export default {
     ...mapMutations(["setSnackbar"]),
 
     bet() {
-      if (!this.amount || this.amount < 0) {
+      if (!this.amount || this.amount <= 0) {
         return this.setSnackbar({
           open: true,
           text: "Amount must be greather than 0",

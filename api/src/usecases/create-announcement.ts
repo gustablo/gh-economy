@@ -3,6 +3,7 @@ import { Announcement } from "../entities/announcement";
 import { Item } from "../entities/item";
 import { User } from "../entities/user";
 import { AnnouncementRepository } from "../repositories/announcement-repository";
+import { prisma } from "../repositories/implementations/prisma";
 import { UserItemRepository } from "../repositories/user-item-repository";
 import { decodeToken } from "../shared/utils/decode-token";
 
@@ -14,7 +15,7 @@ export class CreateAnnouncement {
     ) {}
 
     async exec(request: CreateAnnouncementRequestDTO, token: string) {
-        if (request.valuePerItem < 0) {
+        if (!request.valuePerItem || request.valuePerItem < 0) {
             throw new Error('Amount must be greather or equal 0');
         }
 

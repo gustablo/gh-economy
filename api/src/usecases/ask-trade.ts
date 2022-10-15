@@ -19,6 +19,10 @@ export class AskTrade {
             throw new Error('Quantity asked must be greather than 0');
         }
 
+        if (!request.proposal || request.proposal < 0) {
+            throw new Error('Proposal must be greather than 0');
+        }
+
         const loggedUser = await decodeToken(token);
 
         const fromUser = await this.userRepository.findBy({ id: loggedUser.id });
@@ -32,7 +36,7 @@ export class AskTrade {
             throw new Error('Cannot trade with yourself');
         }
 
-        const amount = request.quantityItemsAsked * announcement.valuePerItem;
+        const amount = request.proposal;
 
         const transaction = new Transaction({
             from: fromUser.wallet,
