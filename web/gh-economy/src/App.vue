@@ -155,7 +155,7 @@ export default {
         id: data.betId,
       });
 
-      this.playAudio('./public/received.mpeg');
+      this.playAudio('../received.mpeg');
     },
     redirect_to_game: function (betId) {
       this.$router.push({ name: "bet_game", params: { id: betId } });
@@ -202,7 +202,7 @@ export default {
         amountWon,
       });
 
-      this.playAudio('./public/win.mpeg');
+      this.playAudio('../win.mpeg');
     },
     you_lose: function (amountLost) {
       this.setCurrentBet({
@@ -211,7 +211,7 @@ export default {
         amountLost,
       });
 
-      this.playAudio('./public/lose.mpeg');
+      this.playAudio('./lose.mpeg');
     },
     update_wallet: function (newBalance) {
       this.user.wallet.props.balance = newBalance;
@@ -245,7 +245,11 @@ export default {
   methods: {
     ...mapMutations(["setUser", "setLoggedIn", "setCurrentBet", "setSnackbar"]),
     playAudio(src) {
+
       const audio = new Audio(src);
+
+audio.crossOrigin = 'anonymous';
+
 
       audio.play().then();
     },
