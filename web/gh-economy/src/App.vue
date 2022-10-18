@@ -315,13 +315,7 @@ export default {
 }
 
 .wallet-top {
-  border-radius: 12px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
-  border-bottom-left-radius: 12px;
   color: black;
-  padding: 6px 20px 2px 20px;
 }
 
 a {
