@@ -209,8 +209,8 @@ export default {
       this.setSnackbar({ color: 'success', text: 'Wallet updated', open: true });
     },
     denied_game: function() {
+      this.emitter.emit('CLOSE_CHOOSE_MODAL');
       this.setSnackbar({ color: 'error', text: 'Bet denied',  open: true });
-      this.receiveChallengeModal = false;
     }
   },
 

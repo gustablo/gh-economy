@@ -15,6 +15,10 @@ export default {
     dialog: null,
   }),
 
+  mounted() {
+      this.emitter.on('CLOSE_CHOOSE_MODAL', () => this.dialog = false);
+  },
+
   methods: {
     startGame() {
       this.dialog = true;
