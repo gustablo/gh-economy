@@ -8,6 +8,127 @@
   </head>
   <body>
     <div id="app"></div>
+    <div id="no-mobile-yet">
+      <div id="coin-mobile-yet" class="heads">
+        <div class="coin-mobile-a heads-img"></div>
+        <div class="coin-mobile-b tails-img"></div>
+      </div>
+      <h3 style="margin-top: 24px">Mobile UI is under development</h3>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
+
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins" !important;
+}
+
+#no-mobile-yet {
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  flex-direction: column;
+}
+
+
+#coin-mobile-yet div {
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-box-shadow: inset 0 0 45px rgba(255, 255, 255, 0.3),
+    0 12px 20px -10px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: inset 0 0 45px rgba(255, 255, 255, 0.3),
+    0 12px 20px -10px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 0 45px rgba(255, 255, 255, 0.3),
+    0 12px 20px -10px rgba(0, 0, 0, 0.4);
+}
+
+.heads-img {
+  background-image: url("./src/assets/heads.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.tails-img {
+  background-image: url("./src/assets/tails.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.coin-mobile-a {
+  width: 100%;
+  height: 100%;
+}
+
+.coin-mobile-b{
+  width: 100%;
+  height: 100%;
+}
+
+.choice-img {
+  width: 200px;
+  height: 200px;
+}
+
+#coin-mobile-yet {
+  transition: -webkit-transform 1s ease-in;
+  -webkit-transform-style: preserve-3d;
+  width: 200px;
+  height: 200px;
+}
+#coin-mobile-yet div {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+}
+
+.coin-mobile-a {
+  z-index: 100;
+}
+
+.coin-mobile-b{
+  -webkit-transform: rotateY(-180deg);
+}
+
+#coin-mobile-yet.heads {
+  -webkit-animation: flipHeads 5s infinite ease-out forwards;
+  -moz-animation: flipHeads 5s infinite ease-out forwards;
+  -o-animation: flipHeads 5s infinite ease-out forwards;
+  animation: flipHeads 5s infinite ease-out forwards;
+}
+
+
+@-webkit-keyframes flipHeads {
+  from {
+    -webkit-transform: rotateY(0);
+    -moz-transform: rotateY(0);
+    transform: rotateY(0);
+  }
+  to {
+    -webkit-transform: rotateY(1800deg);
+    -moz-transform: rotateY(1800deg);
+    transform: rotateY(1800deg);
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  #app {
+    display: none !important;
+  }
+
+  #no-mobile-yet {
+    display: flex;
+  }
+}
+</style>

@@ -30,6 +30,8 @@
               </template>
             </v-tooltip>
           </div>
+
+          <span v-if="!onlineUsers.length">Have no online players yet.</span>
         </div>
 
         <v-divider class="mt-8 mb-4"></v-divider>
@@ -40,7 +42,7 @@
             :placeholder="'bet value'"
             :type="'number'"
           />
-          <v-btn @click="bet" class="btn-bet-now">challenge</v-btn>
+          <v-btn @click="bet" class="btn-bet-now" :disabled="disableBtn">challenge</v-btn>
         </div>
 
         <div v-else class="d-flex justify-space-evenly align-center">
@@ -72,12 +74,24 @@ export default {
 
   computed: {
     ...mapGetters(["user"]),
+
+    disableBtn() {
+      if (!this.selectedUser.props.socketId) return true;
+
+      if (!this.amount || this.amount < 0) return true;
+
+      return false;
+    }
   },
 
   methods: {
     ...mapMutations(["setSnackbar"]),
 
     bet() {
+      if (!this.selectedUser.props.socketId) {
+        return this.setSnackbar({ open: true, text: "Select an opponent" });
+      }
+
       if (!this.amount || this.amount <= 0) {
         return this.setSnackbar({
           open: true,
@@ -92,9 +106,6 @@ export default {
         });
       }
 
-      if (!this.selectedUser.props.socketId) {
-        return this.setSnackbar({ open: true, text: "Select an opponent" });
-      }
 
       this.$socket.emit("ask_bet", {
         game: "HEADS_OR_TAILS",
