@@ -4,7 +4,10 @@
       <nav class="d-flex align-center nav" dense dark>
         <v-toolbar-title class="nav-title">
           <div class="d-flex align-center super-title ml-4" @click="$router.push({ name: 'home' })">
-            <img width="42" src="./assets/heads.png" />
+            <div id="logo-container">
+              <img width="42" src="./assets/heads.png" class="logo-a" />
+              <img width="42" src="./assets/tails.png" class="logo-b" />
+            </div>
             <router-link to="/" class="ml-4">GH Economy</router-link>
           </div>
         </v-toolbar-title>
@@ -248,6 +251,48 @@ export default {
 
 * {
   font-family: "Poppins" !important;
+}
+
+#logo-container {
+  width: 42px;
+  height: 42px;
+  transition-delay: 5s;
+}
+
+.super-title:hover > #logo-container {
+  transition: -webkit-transform 1s ease-in;
+  -webkit-transform-style: preserve-3d;
+  -webkit-animation: flipLogo 5s infinite ease-out forwards;
+  -moz-animation: flipLogo 5s infinite ease-out forwards;
+  -o-animation: flipLogo 5s infinite ease-out forwards;
+  animation: flipLogo 5s infinite ease-out forwards;
+  transition-delay: 5s;
+}
+
+#logo-container img {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+}
+
+.logo-a {
+  z-index: 100;
+}
+
+.logo-b {
+  -webkit-transform: rotateY(-180deg);
+}
+
+@-webkit-keyframes flipLogo {
+  from {
+    -webkit-transform: rotateY(0);
+    -moz-transform: rotateY(0);
+    transform: rotateY(0);
+  }
+  to {
+    -webkit-transform: rotateY(1800deg);
+    -moz-transform: rotateY(1800deg);
+    transform: rotateY(1800deg);
+  }
 }
 
 .nav-title {
