@@ -100,6 +100,11 @@ routes.post('/daily-yields', async (_, res) => {
             user_items: {
                 include: {
                     item: true,
+                },
+                where: {
+                    quantity: {
+                        gt: 0,
+                    }
                 }
             },
             wallet: true,
