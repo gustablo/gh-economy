@@ -211,7 +211,7 @@ export default {
         amountLost,
       });
 
-      this.playAudio('./lose.mpeg');
+      this.playAudio('../lose.mpeg');
     },
     update_wallet: function (newBalance) {
       this.user.wallet.props.balance = newBalance;

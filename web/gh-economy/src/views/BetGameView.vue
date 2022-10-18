@@ -137,13 +137,6 @@ export default {
   },
 
   watch: {
-    "currentBet.win": {
-      handler(v) {
-        nextTick(() => {
-          console.log(v);
-        });
-      },
-    },
     "currentBet.step": {
       handler(v) {
         if (v == 2) {
