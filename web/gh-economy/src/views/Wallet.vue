@@ -70,7 +70,7 @@
     <sell-modal
       :dialog="dialog"
       :item="selectedItem"
-      @onclose="dialog = false"
+      @onclose="dialog = false; loading = -1"
       @onsell="fetchMyItems()"
     />
   </div>
