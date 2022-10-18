@@ -30,6 +30,10 @@ export default {
   name: "BuyItemModal",
   props: ["dialog", "item"],
 
+  mounted() {
+    this.emitter.on('ITEM_PROPOSAL_MADE', () => this.$emit('onclose'));
+  },
+
   computed: {
     announcements() {
       return this.item.announcements;

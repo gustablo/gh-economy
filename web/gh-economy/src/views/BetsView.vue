@@ -2,7 +2,7 @@
   <div class="d-flex justify-center align-center bet-container flex-column">
     <span><b>You can challenge other players to a bet.</b></span>
     <v-btn @click="startGame()" class="btn-gh">START GAME</v-btn>
-    <choose-players-modal :dialog="dialog" @onclose="dialog = !dialog"/>
+    <choose-players-modal :dialog="dialog" @onclose="dialog = false"/>
   </div>
 </template>
 

@@ -33,7 +33,13 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 to: true,
                 announcement: true,
             },
-            where: { id: Number(conditions.id) }
+            where: {
+                id: Number(conditions.id) || undefined,
+                status: conditions.status || undefined,
+                from_id: Number(conditions.from?.props.id) || undefined,
+                to_id: Number(conditions.to?.props.id) || undefined,
+                announcement_id: Number(conditions.announcement?.props.id) || undefined
+            }
         });
 
         if (!transaction) return null;
@@ -122,7 +128,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 status: transaction.status,
                 announcement: new Announcement({
                     id: transaction.announcement_id,
-                    item: new Item({ id: item.id, imageUrl: item.image_url, name: item.name })
+                    item: new Item({ id: item.id, imageUrl: item.image_url, name: item.name, yield: Number(item.yield), rarity: item.rarity, })
                 }),
                 fromUser: new User({
                     name: user.name,

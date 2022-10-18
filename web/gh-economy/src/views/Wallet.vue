@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex flex-wrap wallet-cards mt-12 ml-12 justify-center mb-16">
+  <div
+    class="d-flex flex-wrap wallet-cards mt-12 ml-12 justify-center mb-16"
+    v-if="!fetching && userItems.length"
+  >
     <v-card
       v-for="item in items"
       :key="item.id"
@@ -20,7 +23,7 @@
             <span
               style="font-size: 13px; color: rgb(53, 56, 64) !important"
               class="mr-2 mt-4"
-              >price</span
+              >buyed by</span
             >
 
             <div class="d-flex align-center mb-8">
@@ -49,24 +52,38 @@
           style="width: 100%"
           class="mt-4 btn-sell"
           @click="openSellModal(item)"
-          >Sell</v-btn
+          >sell</v-btn
         >
       </v-card-actions>
     </v-card>
     <sell-modal
       :dialog="dialog"
       :item="selectedItem"
-      @onclose="dialog = !dialog"
+      @onclose="dialog = false"
       @onsell="fetchMyItems()"
     />
   </div>
+
+  <div v-else-if="fetching" style="height: 100%" class="d-flex align-center justify-center">
+    <v-progress-circular
+      width="6"
+      size="100"
+      indeterminate
+    ></v-progress-circular>
+  </div>
+
+  <div v-else-if="!userItems.length" style="height: 100%" class="d-flex align-center justify-center">
+    <span>Nothing here, you can buy items in the shopping</span>
+  </div>
+
+  
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { myItems } from "../api/item";
 import SellModal from "../components/SellModal.vue";
-import Rarity from '../components/shared/Rarity.vue';
+import Rarity from "../components/shared/Rarity.vue";
 
 export default {
   components: {
@@ -78,6 +95,7 @@ export default {
       dialog: false,
       selectedItem: {},
       userItems: [],
+      fetching: true,
     };
   },
 
@@ -104,7 +122,8 @@ export default {
     fetchMyItems() {
       myItems(this.user.id).then(
         (result) => (this.userItems = this.shuffleArray(result))
-      );
+      )
+      .finally(() => (this.fetching = false))
     },
     shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {

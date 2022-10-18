@@ -29,7 +29,7 @@ model user {
   announcements  announcement[]
   socket_id      String         @default("")
   status         String         @default("OFFLINE")
-  avatar_url     String         @default("https://bigheads.io/editor/?accessory=tinyGlasses&body=breasts&circleColor=blue&clothing=naked&clothingColor=red&eyebrows=raised&eyes=happy&faceMask=false&faceMaskColor=white&facialHair=none3&graphic=vue&hair=balding&hairColor=pink&hat=none4&hatColor=black&lashes=false&lipColor=red&mask=true&mouth=grin&skinTone=yellow")
+  avatar_url     String         @default("https://forkast.news/wp-content/uploads/2022/03/NFT-Avatar.png")
   bet_challenger bet[]          @relation("challenger")
   bet_challenged bet[]          @relation("challenged")
   bet_winner     bet[]          @relation("winner")

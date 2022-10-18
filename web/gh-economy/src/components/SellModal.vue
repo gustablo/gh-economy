@@ -12,12 +12,16 @@
 
           <div class="d-flex sell-inputs align-center">
             <gh-input
-              :placeholder="'price'"
+              :placeholder="'suggested price'"
               v-model="valuePerItem"
               :type="'number'"
             />
 
-            <v-btn class="sell-modal-btn" @click="sell">sell</v-btn>
+            <v-btn class="sell-modal-btn" @click="sell">
+              <span v-if="!loading">send</span>
+              <v-progress-circular size="24" width="3" v-else indeterminate></v-progress-circular>
+              </v-btn
+            >
           </div>
         </div>
       </v-card-actions>
@@ -26,7 +30,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 import { createAnnouncement } from "../api/announcement";
 import GhInput from "./shared/GhInput.vue";
 
@@ -40,18 +44,35 @@ export default {
     return {
       quantity: 1,
       valuePerItem: null,
+      loading: false,
     };
   },
 
   methods: {
-    ...mapMutations(['setSnackbar']),
+    ...mapMutations(["setSnackbar"]),
     sell() {
+      if (this.loading) return;
+
+      this.loading = true;
+
       createAnnouncement(this.item.id, this.quantity, this.valuePerItem).then(
         () => {
-          this.setSnackbar({ open: true, text: 'Item announced successfully', color: 'success' });
-          this.$emit('onsell');
+          this.setSnackbar({
+            open: true,
+            text: "Item announced successfully",
+            color: "success",
+          });
+          this.$emit("onsell");
+          this.close();
         }
-      );
+      ).finally(() => {
+        this.loading = false;
+      })
+    },
+
+    close() {
+      this.$emit("onclose");
+      this.valuePerItem = null;
     },
   },
 
@@ -59,8 +80,7 @@ export default {
     dialog: {
       handler(v) {
         if (!v) {
-          this.$emit("onclose");
-          this.valuePerItem = null;
+          this.close();
         }
       },
     },

@@ -3,17 +3,25 @@
     <nav>
       <nav class="d-flex align-center nav" dense dark>
         <v-toolbar-title class="nav-title">
-          <div class="d-flex align-center super-title ml-4">
-            <img width="50" src="./assets/coin.png" />
+          <div class="d-flex align-center super-title ml-4" @click="$router.push({ name: 'home' })">
+            <img width="42" src="./assets/heads.png" />
             <router-link to="/" class="ml-4">GH Economy</router-link>
           </div>
         </v-toolbar-title>
 
         <div class="d-flex links align-center">
-          <div class="wallet-top d-flex align-center" v-if="loggedIn">
-            <img width="28" src="./assets/coin.png" />
-            <span class="ml-2">{{ wallet }}</span>
-          </div>
+          <v-tooltip text="Your balance" location="bottom">
+            <template v-slot:activator="{ props }">
+              <div
+                v-bind="props"
+                class="wallet-top d-flex align-center"
+                v-if="loggedIn"
+              >
+                <img width="28" src="./assets/coin.png" />
+                <span class="ml-2 mt-1">{{ wallet }}</span>
+              </div>
+            </template>
+          </v-tooltip>
 
           <span v-if="loggedIn">
             <v-tooltip text="Coming soon" location="bottom">
@@ -50,7 +58,7 @@
           </span>
 
           <span v-if="loggedIn">
-            <v-menu anchor="bottom end" rounded>
+            <v-menu rounded :close-on-content-click="false">
               <template v-slot:activator="{ props }">
                 <div v-bind="props">
                   <v-tooltip text="My account" location="bottom">
@@ -63,17 +71,37 @@
                 </div>
               </template>
               <v-card>
-                <v-card-text>
-                  <div class="mx-auto text-center">
-                    <v-btn rounded variant="text"
-                      ><router-link to="/trades">
-                        Negociations
-                      </router-link></v-btn
-                    >
-                    <v-divider class="my-3"></v-divider>
-                    <v-btn @click="logout" class="logout">logout</v-btn>
-                  </div>
-                </v-card-text>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-avatar>
+                      <img
+                        width="100"
+                        style="border-radius: 50%"
+                        :src="user.avatarUrl"
+                        class="ml-3 mb-3 mt-2"
+                      />
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title>{{ user.name }}</v-list-item-title>
+                      <v-list-item-subtitle
+                        >Sir Lord of Coins</v-list-item-subtitle
+                      >
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+
+                <v-divider></v-divider>
+
+                <v-list>
+                  <v-list-item @click="$router.push({ name: 'trades' })">
+                    <v-list-item-title> Negociations </v-list-item-title>
+                  </v-list-item>
+
+                  <v-list-item @click="logout">
+                    <v-list-item-title>Logout</v-list-item-title>
+                  </v-list-item>
+                </v-list>
               </v-card>
             </v-menu>
           </span>

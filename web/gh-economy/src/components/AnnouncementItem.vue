@@ -35,10 +35,17 @@
     <v-divider style="width: 100%; margin-left: -7px" class="mb-4"></v-divider>
 
     <div class="d-flex buy-inputs align-center">
-
       <gh-input :placeholder="'proposal'" v-model="proposal" :type="'number'" />
 
-      <v-btn class="btn-buy" @click="buy">send</v-btn>
+      <v-btn class="btn-buy" @click="buy">
+        <span v-if="!loading">send</span>
+        <v-progress-circular
+          size="24"
+          width="3"
+          v-else
+          indeterminate
+        ></v-progress-circular>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -46,7 +53,7 @@
 <script>
 import { mapMutations } from "vuex";
 import { ask } from "../api/trade";
-import GhInput from './shared/GhInput.vue';
+import GhInput from "./shared/GhInput.vue";
 
 export default {
   components: { GhInput },
@@ -58,19 +65,26 @@ export default {
     return {
       quantity: 1,
       proposal: null,
+      loading: false,
     };
   },
 
   methods: {
     ...mapMutations(["setSnackbar"]),
     buy() {
+      if (this.loading) return;
+
+      this.loading = true;
+
       ask(this.announcement.id, this.quantity, this.proposal).then(() => {
         this.setSnackbar({
           open: true,
           color: "success",
           text: "proposal successfully, wait user accept",
         });
-      });
+
+        this.emitter.emit("ITEM_PROPOSAL_MADE");
+      }).finally(() => this.loading = false)
     },
   },
 };

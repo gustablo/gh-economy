@@ -28,7 +28,6 @@ export const socket = (server: http.Server) => {
             });
         });
 
-
         socket.on('ask_bet', async (data) => {
             const bet = await betRepository.create({
                 amount: Number(data.amount),

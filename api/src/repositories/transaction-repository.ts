@@ -1,5 +1,4 @@
 import { TransactionProps } from "../entities/transaction";
-import { User } from "../entities/user";
 
 export interface TransactionRepository {
     create(transaction: TransactionProps): Promise<Partial<TransactionProps>>;

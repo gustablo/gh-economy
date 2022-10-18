@@ -12,10 +12,10 @@ export class AskTrade {
         private userRepository: UserRepository,
         private transactionRepository: TransactionRepository,
         private announcementRepository: AnnouncementRepository
-    ) {}
+    ) { }
 
     async exec(request: AskTradeRequestDTO, token: string) {
-        if (request.quantityItemsAsked <=0) {
+        if (request.quantityItemsAsked <= 0) {
             throw new Error('Quantity asked must be greather than 0');
         }
 
@@ -29,10 +29,22 @@ export class AskTrade {
 
         if (!fromUser) throw new Error('User not found');
 
+
         const announcement = await this.announcementRepository.findBy({ id: request.announcementId });
         if (!announcement) throw new Error('Announcement not found');
 
-        if(announcement.user.props.id == fromUser.id) {
+        const tradeAlreadyAsked = await this.transactionRepository.findBy({
+            status: 'PENDING',
+            from: fromUser.wallet,
+            to: announcement?.user.props.wallet,
+            announcement: new Announcement(announcement)
+        });
+
+        if (tradeAlreadyAsked) {
+            throw new Error('You already made proposal for this item');
+        }
+
+        if (announcement.user.props.id == fromUser.id) {
             throw new Error('Cannot trade with yourself');
         }
 

@@ -19,7 +19,7 @@ export class CurrentUser {
             return acc + cur.props.buyedPer * cur.props.quantity;
         }, 0);
 
-        user.patrimony = patrimony || 0;
+        user.patrimony = ( patrimony || 0 ) +  user.wallet?.props.balance!;
 
         return user;
     }

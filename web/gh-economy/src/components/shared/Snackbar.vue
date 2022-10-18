@@ -12,7 +12,7 @@ export default {
     ...mapGetters(["snackbar"]),
     color() {
       if (this.snackbar.color == "error") {
-        return "red red darken-4";
+        return "red darken-4";
       }
 
       return "teal darken-1";

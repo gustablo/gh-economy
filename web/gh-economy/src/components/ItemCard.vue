@@ -43,13 +43,14 @@
         style="width: 100%"
         class="mt-4 btn-sell"
         @click="openBuyItemModal(item)"
+        v-if="loggedIn"
         >buy</v-btn
       >
     </v-card-actions>
     <buy-item-modal
       :dialog="dialog"
       :item="selectedItem"
-      @onclose="dialog = !dialog"
+      @onclose="dialog = false"
     />
   </v-card>
 </template>
