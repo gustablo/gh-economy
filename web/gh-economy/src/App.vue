@@ -289,9 +289,9 @@ export default {
     transform: rotateY(0);
   }
   to {
-    -webkit-transform: rotateY(1800deg);
-    -moz-transform: rotateY(1800deg);
-    transform: rotateY(1800deg);
+    -webkit-transform: rotateY(1080deg);
+    -moz-transform: rotateY(1080deg);
+    transform: rotateY(1080deg);
   }
 }
 
