@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="!fetching && transactions.length"
-    class="d-flex flex-column align-center justify-center mt-12 pending-cards">
+    class="d-flex flex-column align-center justify-center mt-12 pending-cards"
+  >
     <v-card
       v-for="transaction in transactions"
       :key="transaction.id"
@@ -59,7 +60,11 @@
         </div>
       </div>
 
-    <v-progress-linear v-if="transaction.loading" class="mt-4" indeterminate></v-progress-linear>
+      <v-progress-linear
+        v-if="transaction.loading"
+        class="mt-4"
+        indeterminate
+      ></v-progress-linear>
     </v-card>
 
     <item-details-modal
@@ -69,15 +74,23 @@
     />
   </div>
 
-  <div v-else-if="fetching" style="height: 100%" class="d-flex align-center justify-center">
+  <div
+    v-else-if="fetching"
+    style="height: 100%"
+    class="d-flex align-center justify-center"
+  >
     <v-progress-circular
-          width="6"
-          size="100"
-          indeterminate
-        ></v-progress-circular>
+      width="6"
+      size="100"
+      indeterminate
+    ></v-progress-circular>
   </div>
 
-  <div v-else-if="!transactions.length" style="height: 100%" class="d-flex align-center justify-center">
+  <div
+    v-else-if="!transactions.length"
+    style="height: 100%"
+    class="d-flex align-center justify-center"
+  >
     <b>Nothing here, you can announce items accessing your wallet</b>
   </div>
 </template>
@@ -105,8 +118,8 @@ export default {
     ...mapMutations(["setSnackbar"]),
     fetchPendingTrades() {
       pendingTrades()
-      .then((result) => (this.transactions = result))
-      .finally(() => this.fetching = false)
+        .then((result) => (this.transactions = result))
+        .finally(() => (this.fetching = false));
     },
     openMoreDetails(transaction) {
       this.selectedItem = transaction.announcement.props.item.props;
@@ -123,15 +136,14 @@ export default {
       transaction.loading = true;
 
       confirm(transaction.id, option).then(() => {
-        this.fetchPendingTrades().then(() => {
-          this.setSnackbar({
-            open: true,
-            color: "success",
-            text: snackbarMessages[option],
-          });
-
-          transaction.loading = false;
+        this.fetchPendingTrades();
+        this.setSnackbar({
+          open: true,
+          color: "success",
+          text: snackbarMessages[option],
         });
+
+        transaction.loading = false;
       });
     },
   },
@@ -161,4 +173,4 @@ export default {
   font-size: 13px;
   color: rgb(53, 56, 64) !important;
 }
-</style>F
+</style>

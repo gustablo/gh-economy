@@ -57,6 +57,12 @@ routes.post('/announcements', isAuthorized, async (req, res) => {
     return respond(result, res);
 });
 
+routes.delete('/announcements/:id', isAuthorized, async (req, res) => {
+    const result = await announcementController.cancel(req.params['id'], req.headers['authorization']!);
+
+    return respond(result, res);
+});
+
 routes.get('/items/announcements', async (req, res) => {
     const result = await itemController.listAnnouncedItems(req.headers['authorization']);
 

@@ -1,6 +1,6 @@
 import { Item } from "../../entities/item";
 import { UserItem, UserItemProps } from "../../entities/user-item";
-import { UserItemRepository } from "../user-item-repository";
+import { MyItems, UserItemRepository } from "../user-item-repository";
 import { prisma } from "./prisma";
 
 export class UserItemPrismaRepository implements UserItemRepository {
@@ -33,30 +33,40 @@ export class UserItemPrismaRepository implements UserItemRepository {
         }
     }
 
-    async listMyItems(userId: number): Promise<UserItem[]> {
+    async listMyItems(userId: number): Promise<MyItems[]> {
         const items = await prisma.user_items.findMany({
             include: {
-                item: true,
+                item: {
+                    include: {
+                        announcements: {
+                            where: {
+                                user_id: userId,
+                                status: 'OPEN',
+                            }
+                        }
+                    }
+                },
             },
             where: {
                 user_id: userId,
-                quantity: {
-                    gt: 0,
-                }
             }
         });
 
-        return items.map(({ quantity, item, buyed_per }) => (new UserItem({
-            quantity,
-            item: new Item({
-                id: item.id,
-                imageUrl: item.image_url,
-                name: item.name,
-                yield: Number(item.yield),
-                rarity: item.rarity,
-            }),
-            buyedPer: Number(buyed_per)
-        })))
+        return items.map(({ quantity, item, buyed_per }) => {
+            const userItem = new UserItem({
+                quantity,
+                item: new Item({
+                    id: item.id,
+                    imageUrl: item.image_url,
+                    name: item.name,
+                    yield: Number(item.yield),
+                    rarity: item.rarity,
+                }),
+                buyedPer: Number(buyed_per),
+            });
+
+            return { ...userItem.props, announcementId: item.announcements?.length ? item.announcements[0].id : undefined };
+        })
     }
 
 }

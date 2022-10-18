@@ -4,7 +4,7 @@
     v-if="!fetching && userItems.length"
   >
     <v-card
-      v-for="item in items"
+      v-for="(item, i) in items"
       :key="item.id"
       class="wallet-card d-flex flex-column align-center"
     >
@@ -49,10 +49,21 @@
         <rarity :item="item" />
 
         <v-btn
-          style="width: 100%"
+          style="width: 100%;"
           class="mt-4 btn-sell"
           @click="openSellModal(item)"
+          v-if="!item.announcementId"
           >sell</v-btn
+        >
+        <v-btn
+          style="width: 100%; background-color: #F44336 !important"
+          class="mt-4 btn-sell"
+          @click="() => cancelAnnouncement(item, i)"
+          v-else
+          >
+          <v-progress-circular size="24" width="3" v-if="loading == i" indeterminate></v-progress-circular>
+          <span v-else>cancel announcement</span>
+          </v-btn
         >
       </v-card-actions>
     </v-card>
@@ -64,7 +75,11 @@
     />
   </div>
 
-  <div v-else-if="fetching" style="height: 100%" class="d-flex align-center justify-center">
+  <div
+    v-else-if="fetching"
+    style="height: 100%"
+    class="d-flex align-center justify-center"
+  >
     <v-progress-circular
       width="6"
       size="100"
@@ -72,15 +87,18 @@
     ></v-progress-circular>
   </div>
 
-  <div v-else-if="!userItems.length" style="height: 100%" class="d-flex align-center justify-center">
+  <div
+    v-else-if="!userItems.length"
+    style="height: 100%"
+    class="d-flex align-center justify-center"
+  >
     <span>Nothing here, you can buy items in the shopping</span>
   </div>
-
-  
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
+import { cancelAnnouncement } from '../api/announcement';
 import { myItems } from "../api/item";
 import SellModal from "../components/SellModal.vue";
 import Rarity from "../components/shared/Rarity.vue";
@@ -96,6 +114,7 @@ export default {
       selectedItem: {},
       userItems: [],
       fetching: true,
+      loading: -1,
     };
   },
 
@@ -107,36 +126,38 @@ export default {
     ...mapGetters(["user"]),
 
     items() {
-      return this.userItems.map(({ props }) => {
-        const item = props.item.props;
+      return this.userItems.map((userItem) => {
+        const item = userItem.item.props;
 
         return {
           ...item,
-          ...props,
+          ...userItem,
         };
       });
     },
   },
 
   methods: {
+    ...mapMutations(['setSnackbar']),
     fetchMyItems() {
-      myItems(this.user.id).then(
-        (result) => (this.userItems = this.shuffleArray(result))
-      )
-      .finally(() => (this.fetching = false))
-    },
-    shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-
-      return array;
+      myItems(this.user.id)
+        .then((result) => (this.userItems = result))
+        .finally(() => (this.fetching = false));
     },
     openSellModal(item) {
       this.selectedItem = item;
       this.dialog = true;
     },
+    cancelAnnouncement(item, i) {
+      this.loading = i;
+  
+      cancelAnnouncement(item.announcementId)
+        .then(() => {
+          this.fetchMyItems();
+          this.setSnackbar({ open: true, color: 'success', text: 'Announcement canceled successfully' });
+        })
+        .finally(() => (item.loading = -1))
+    }
   },
 };
 </script>

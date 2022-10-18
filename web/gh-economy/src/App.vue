@@ -76,21 +76,21 @@
               <v-card>
                 <v-list>
                   <v-list-item>
-                    <v-list-item-avatar>
+                    <div>
                       <img
                         width="100"
                         style="border-radius: 50%"
                         :src="user.avatarUrl"
                         class="ml-3 mb-3 mt-2"
                       />
-                    </v-list-item-avatar>
+                    </div>
 
-                    <v-list-item-content>
+                    <div>
                       <v-list-item-title>{{ user.name }}</v-list-item-title>
                       <v-list-item-subtitle
                         >Sir Lord of Coins</v-list-item-subtitle
                       >
-                    </v-list-item-content>
+                    </div>
                   </v-list-item>
                 </v-list>
 

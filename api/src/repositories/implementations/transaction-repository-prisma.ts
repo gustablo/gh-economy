@@ -1,12 +1,23 @@
 import { Announcement } from "../../entities/announcement";
 import { Item } from "../../entities/item";
 import { TransactionProps } from "../../entities/transaction";
-import { User, UserProps } from "../../entities/user";
+import { User } from "../../entities/user";
 import { Wallet } from "../../entities/wallet";
 import { TransactionRepository } from "../transaction-repository";
 import { prisma } from "./prisma";
 
+
 export class TransactionPrismaRepository implements TransactionRepository {
+    
+    async updateMany(conditions: any, transaction: Partial<TransactionProps>): Promise<void> {
+        await prisma.transaction.updateMany({
+            where: conditions,
+            data: {
+                status: transaction.status,
+            }
+        })
+    }
+
     async create(transaction: TransactionProps): Promise<Partial<TransactionProps>> {
         const created = await prisma.transaction.create({
             data: {
@@ -23,7 +34,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
             id: created.id?.toString(),
             status: created.status,
             amount: Number(created.amount.toString()),
-        }
+        };
     }
 
     async findBy(conditions: Partial<TransactionProps>): Promise<TransactionProps | null> {
@@ -42,7 +53,8 @@ export class TransactionPrismaRepository implements TransactionRepository {
             }
         });
 
-        if (!transaction) return null;
+        if (!transaction)
+            return null;
 
         const { to, from, announcement } = transaction;
 
@@ -61,7 +73,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 item: new Item({ id: announcement.item_id }),
                 user: new User({ id: announcement.user_id.toString() }),
             }),
-        }
+        };
     }
 
     async update(transactionId: string, transaction: Partial<TransactionProps>): Promise<TransactionProps> {
@@ -94,7 +106,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 item: new Item({ id: announcement.item_id }),
                 user: new User({ id: announcement.user_id.toString() }),
             }),
-        }
+        };
     }
 
     async list(conditions: any): Promise<Omit<TransactionProps, 'to' | 'from'>[]> {
@@ -133,7 +145,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 fromUser: new User({
                     name: user.name,
                 }),
-            }
+            };
         });
     }
 

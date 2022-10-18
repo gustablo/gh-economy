@@ -69,6 +69,10 @@ export class ConfirmTrade {
         await this.walletRepository.update(to.id!, to.balance);
 
         const updatedTransaction = await this.transactionRepository.update(newTransaction.props.id!, { status: 'CONFIRMED' });
+        
+        const otherTransactionsThatNeedToBeUpdated = { status: 'PENDING', announcement_id: Number(announcement.id) };
+        const othersTransactionsUpdated = { status: 'CANCELED' };
+        await this.transactionRepository.updateMany(otherTransactionsThatNeedToBeUpdated, othersTransactionsUpdated);
 
         return updatedTransaction;
     }

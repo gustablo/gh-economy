@@ -9,3 +9,9 @@ export const createAnnouncement = async (itemId, quantity, valuePerItem) => {
 
     return result.data;
 };
+
+export const cancelAnnouncement = async (announcementId) => {
+    const result = await api.delete(`/announcements/${announcementId}`);
+
+    return result.data;
+};
