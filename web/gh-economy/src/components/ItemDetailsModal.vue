@@ -66,7 +66,7 @@ export default {
 
 <style scoped>
 .item-card {
-  width: 400px;
+  width: 350px;
   box-shadow: rgb(0 0 0 / 8%) 0px 4px 15px;
   position: relative;
   border-radius: 10px;
