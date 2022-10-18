@@ -13,7 +13,7 @@ api.interceptors.response.use(result => {
     return result;
 }, error => {
     const message = error.response.data;
-    store.commit('setSnackbar', { open: true, text: message });
+    store.commit('setSnackbar', { open: true, text: message, color: 'error' });
     throw error;
 });
 

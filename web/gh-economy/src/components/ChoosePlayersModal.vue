@@ -89,13 +89,14 @@ export default {
 
     bet() {
       if (!this.selectedUser.props.id) {
-        return this.setSnackbar({ open: true, text: "Select an opponent" });
+        return this.setSnackbar({ open: true, text: "Select an opponent", color: 'error' });
       }
 
       if (!this.amount || this.amount <= 0) {
         return this.setSnackbar({
           open: true,
           text: "Amount must be greather than 0",
+          color: 'error',
         });
       }
 
@@ -103,6 +104,7 @@ export default {
         return this.setSnackbar({
           open: true,
           text: "You do not have enough coins",
+          color: 'error',
         });
       }
 
