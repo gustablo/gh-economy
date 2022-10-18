@@ -9,6 +9,7 @@ import { SignupRequestDTO } from "../dtos/signup";
 import { SigninRequestDTO } from "../dtos/signin";
 import { CurrentUser } from "../usecases/current-user";
 import { OnlineUsers } from "../usecases/online-users";
+import { Socket } from "socket.io";
 
 export class UserController {
 

@@ -1,8 +1,10 @@
+import { Socket } from "socket.io";
 import { AskTradeRequestDTO } from "../dtos/ask-trade";
 import { ConfirmTradeRequestDTO } from "../dtos/confirm-trade";
 import { AnnouncementPrismaRepository } from "../repositories/implementations/announcement-repository-prisma";
 import { ItemPrismaRepository } from "../repositories/implementations/item-repository-prisma";
 import { TransactionPrismaRepository } from "../repositories/implementations/transaction-repository-prisma";
+import { UserItemPrismaRepository } from "../repositories/implementations/user-item-repository-prisma";
 import { UserPrismaRepository } from "../repositories/implementations/user-repository-prisma"
 import { WalletPrismaRepository } from "../repositories/implementations/wallet-repository-prisma";
 import { HttpResponse } from "../shared/contracts/http-response";
@@ -26,7 +28,8 @@ export class TradeController {
         this.walletRepo,
         this.userRepo,
         this.announcementRepo,
-        this.itemRepo
+        this.itemRepo,
+        new UserItemPrismaRepository(),
     );
 
     async askTrade(body: AskTradeRequestDTO, token: string): Promise<HttpResponse> {
@@ -39,9 +42,9 @@ export class TradeController {
         }
     }
 
-    async confirmTrade(body: ConfirmTradeRequestDTO, token: string): Promise<HttpResponse> {
+    async confirmTrade(body: ConfirmTradeRequestDTO, token: string, io: Socket): Promise<HttpResponse> {
         try {
-            const response = await this.confirmUseCase.exec(body.transactionId, body.decision, token);
+            const response = await this.confirmUseCase.exec(body.transactionId, body.decision, token, io);
 
             return commonSuccess(response);
         } catch(error) {

@@ -1,3 +1,4 @@
+import { Socket } from "socket.io";
 import { AskTradeRequestDTO } from "../dtos/ask-trade";
 import { Announcement } from "../entities/announcement";
 import { Transaction } from "../entities/transaction";
@@ -28,7 +29,6 @@ export class AskTrade {
         const fromUser = await this.userRepository.findBy({ id: loggedUser.id });
 
         if (!fromUser) throw new Error('User not found');
-
 
         const announcement = await this.announcementRepository.findBy({ id: request.announcementId });
         if (!announcement) throw new Error('Announcement not found');

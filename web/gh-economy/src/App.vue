@@ -205,6 +205,8 @@ export default {
     update_wallet: function (newBalance) {
       this.user.wallet.props.balance = newBalance;
       this.setUser(this.user);
+
+      this.setSnackbar({ color: 'success', text: 'Wallet updated', open: true });
     },
   },
 
@@ -226,7 +228,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setUser", "setLoggedIn", "setCurrentBet"]),
+    ...mapMutations(["setUser", "setLoggedIn", "setCurrentBet", "setSnackbar"]),
     logout() {
       this.setUser({});
       localStorage.removeItem("token");

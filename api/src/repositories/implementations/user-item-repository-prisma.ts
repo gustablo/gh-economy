@@ -33,6 +33,27 @@ export class UserItemPrismaRepository implements UserItemRepository {
         }
     }
 
+    async deleteItem(userId: number, itemId: number): Promise<void> {
+        await prisma.user_items.deleteMany({
+            where: {
+                user_id: userId,
+                item_id: itemId
+            }
+        })
+    }
+
+    async updateQuantity(userId: number, itemId: number, newQuantity: number): Promise<void> {
+        await prisma.user_items.updateMany({
+            where: {
+                user_id: userId,
+                item_id: itemId,
+            },
+            data: {
+                quantity: newQuantity,
+            }
+        })
+    }
+
     async listMyItems(userId: number): Promise<MyItems[]> {
         const items = await prisma.user_items.findMany({
             include: {
@@ -49,6 +70,9 @@ export class UserItemPrismaRepository implements UserItemRepository {
             },
             where: {
                 user_id: userId,
+            },
+            orderBy: {
+                id: 'desc'
             }
         });
 

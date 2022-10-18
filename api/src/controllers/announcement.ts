@@ -18,6 +18,7 @@ export class AnnouncementController {
     private cancelUsecase = new CancelAnnouncement(
         this.announcementRepo,
         this.transactionRepo,
+        this.userItemRepo,
     )
 
     async create(body: CreateAnnouncementRequestDTO, token: string) {

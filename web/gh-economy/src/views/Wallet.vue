@@ -23,7 +23,7 @@
             <span
               style="font-size: 13px; color: rgb(53, 56, 64) !important"
               class="mr-2 mt-4"
-              >buyed by</span
+              >buyed per</span
             >
 
             <div class="d-flex align-center mb-8">

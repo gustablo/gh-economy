@@ -40,7 +40,7 @@ routes.post('/trades/ask', isAuthorized, async (req, res) => {
 });
 
 routes.post('/trades/confirm', isAuthorized, async (req, res) => {
-    const result = await tradeController.confirmTrade(req.body, req.headers['authorization']!);
+    const result = await tradeController.confirmTrade(req.body, req.headers['authorization']!, req.app.get('io'));
 
     return respond(result, res);
 });

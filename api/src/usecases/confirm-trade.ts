@@ -1,7 +1,10 @@
+import { Socket } from "socket.io";
 import { Transaction } from "../entities/transaction";
+import { User, UserProps } from "../entities/user";
 import { AnnouncementRepository } from "../repositories/announcement-repository";
 import { ItemRepository } from "../repositories/item-repository";
 import { TransactionRepository } from "../repositories/transaction-repository";
+import { UserItemRepository } from "../repositories/user-item-repository";
 import { UserRepository } from "../repositories/user-repository";
 import { WalletRepository } from "../repositories/wallet-repository";
 import { decodeToken } from "../shared/utils/decode-token";
@@ -14,9 +17,10 @@ export class ConfirmTrade {
         private userRepository: UserRepository,
         private announcementRepository: AnnouncementRepository,
         private itemRepository: ItemRepository,
+        private userItemRepo: UserItemRepository,
     ) {} 
 
-    async exec(transactionId: string, decision: 'ACCEPT' | 'DECLINE', token: string) {
+    async exec(transactionId: string, decision: 'ACCEPT' | 'DECLINE', token: string, io: Socket) {
         if (decision !== 'ACCEPT' && decision !== 'DECLINE') {
             throw new Error('Invalid decision');
         }
@@ -62,11 +66,16 @@ export class ConfirmTrade {
             userToReceiveItems!.id!,
             announcement.item.props.id!,
             transaction.quantityItemsAsked,
-            announcement.valuePerItem,
+            transaction.amount,
         );
+
+        await this.userItemRepo.deleteItem(Number(userFrom?.id), announcement.item.props.id!);
 
         await this.walletRepository.update(from.id!, from.balance);
         await this.walletRepository.update(to.id!, to.balance);
+
+        this.updateUserWalletRealTime(userToReceiveItems!, from.balance, io);
+        this.updateUserWalletRealTime(userFrom!, to.balance, io);
 
         const updatedTransaction = await this.transactionRepository.update(newTransaction.props.id!, { status: 'CONFIRMED' });
         
@@ -75,5 +84,11 @@ export class ConfirmTrade {
         await this.transactionRepository.updateMany(otherTransactionsThatNeedToBeUpdated, othersTransactionsUpdated);
 
         return updatedTransaction;
+    }
+    
+    updateUserWalletRealTime(user: UserProps, balance: number, io: Socket) {
+        if (user.status == 'ONLINE') {
+            io.to(user.socketId!).emit('update_wallet', balance);
+        }
     }
 }
