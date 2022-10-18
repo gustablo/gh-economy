@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="!fetching && transactions.length"
-    class="d-flex flex-column align-center justify-center mt-12 pending-cards"
+    class="d-flex flex-column align-center justify-center mt-12 pending-cards mb-8"
   >
     <v-card
       v-for="transaction in transactions"

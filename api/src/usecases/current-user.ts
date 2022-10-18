@@ -1,6 +1,7 @@
 import { UserRepository } from "../repositories/user-repository";
 import { decodeToken } from "../shared/utils/decode-token";
 
+
 export class CurrentUser {
     constructor(
         private userRepo: UserRepository

@@ -22,7 +22,6 @@ export class UserController {
         new WalletPrismaRepository(),
     );
 
-
     async sigup(body: SignupRequestDTO): Promise<HttpResponse> {
         try {
             const response = await this.signupUseCase.exec(body);
@@ -53,7 +52,7 @@ export class UserController {
         }
     }
 
-    async listOnline(token: string) {
+    async listOnline(token: string): Promise<HttpResponse> {
         try {
             const result = await this.onlineUseCase.exec(token);
 

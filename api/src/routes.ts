@@ -5,6 +5,7 @@ import { ItemController } from './controllers/item';
 import { TradeController } from './controllers/trade';
 import { UserController } from './controllers/user';
 import { isAuthorized } from './middlewares';
+import { prisma } from './repositories/implementations/prisma';
 import { HttpResponse } from './shared/contracts/http-response';
 
 const routes = Router();
@@ -92,6 +93,39 @@ routes.get('/users/online', isAuthorized, async (req, res) => {
 
     return respond(result, res);
 })
+
+routes.post('/daily-yields', async (_, res) => {
+    const allUsers = await prisma.user.findMany({
+        include: {
+            user_items: {
+                include: {
+                    item: true,
+                }
+            },
+            wallet: true,
+        }
+    });
+
+    for (const user of allUsers) {
+        const items = user.user_items.map(userItem => userItem.item);
+
+        const allYields = items.reduce((acc, item) => {
+            acc += Number(item.yield);
+            return acc;
+        }, 0);
+
+        await prisma.wallet.update({
+            where: {
+                id: user.wallet.id,
+            },
+            data: {
+                balance: Number(user.wallet.balance) + Number(allYields),
+            }
+        });
+    }
+
+    return res.json({ ok: true }).status(200);
+});
 
 const respond = (result: HttpResponse, res: Response) => {
     return res.
