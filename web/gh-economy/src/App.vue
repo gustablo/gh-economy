@@ -146,6 +146,10 @@ export default {
       this.receiveChallengeModal = true;
       this.receiveChallengeBet = data;
 
+      const audio = new Audio('./public/received.mpeg');
+
+      audio.play().then();
+
       this.setCurrentBet({
         step: 0,
         id: data.betId,
