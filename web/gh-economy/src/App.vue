@@ -3,7 +3,10 @@
     <nav>
       <nav class="d-flex align-center nav" dense dark>
         <v-toolbar-title class="nav-title">
-          <div class="d-flex align-center super-title ml-4" @click="$router.push({ name: 'home' })">
+          <div
+            class="d-flex align-center super-title ml-4"
+            @click="$router.push({ name: 'home' })"
+          >
             <div id="logo-container">
               <img width="42" src="./assets/heads.png" class="logo-a" />
               <img width="42" src="./assets/tails.png" class="logo-b" />
@@ -146,14 +149,13 @@ export default {
       this.receiveChallengeModal = true;
       this.receiveChallengeBet = data;
 
-      const audio = new Audio('./public/received.mpeg');
-
-      audio.play().then();
 
       this.setCurrentBet({
         step: 0,
         id: data.betId,
       });
+
+      this.playAudio('./public/received.mpeg');
     },
     redirect_to_game: function (betId) {
       this.$router.push({ name: "bet_game", params: { id: betId } });
@@ -193,11 +195,14 @@ export default {
       });
     },
     you_win: function (amountWon) {
+      
       this.setCurrentBet({
         win: true,
         step: 4,
         amountWon,
       });
+
+      this.playAudio('./public/win.mpeg');
     },
     you_lose: function (amountLost) {
       this.setCurrentBet({
@@ -205,6 +210,8 @@ export default {
         step: 4,
         amountLost,
       });
+
+      this.playAudio('./public/lose.mpeg');
     },
     update_wallet: function (newBalance) {
       this.user.wallet.props.balance = newBalance;
@@ -237,6 +244,11 @@ export default {
 
   methods: {
     ...mapMutations(["setUser", "setLoggedIn", "setCurrentBet", "setSnackbar"]),
+    playAudio(src) {
+      const audio = new Audio(src);
+
+      audio.play().then();
+    },
     logout() {
       this.setUser({});
       localStorage.removeItem("token");
