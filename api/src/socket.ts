@@ -36,7 +36,11 @@ export const socket = (server: http.Server) => {
                 game: 'HEADS_OR_TAILS',
             });
 
-            io.to(data.challengedId).emit('received_bet_challenge', {
+            const user = await userRepository.findBy({ id: Number(data.challengedId) });
+
+            if (!user || user.status == 'OFFLINE' || !user.socketId) return;
+
+            io.to(user.socketId).emit('received_bet_challenge', {
                 amount: data.amount,
                 game: data.game,
                 challengerId: socket.id,

@@ -76,7 +76,7 @@ export default {
     ...mapGetters(["user"]),
 
     disableBtn() {
-      if (!this.selectedUser.props.socketId) return true;
+      if (!this.selectedUser.props.id) return true;
 
       if (!this.amount || this.amount < 0) return true;
 
@@ -88,7 +88,7 @@ export default {
     ...mapMutations(["setSnackbar"]),
 
     bet() {
-      if (!this.selectedUser.props.socketId) {
+      if (!this.selectedUser.props.id) {
         return this.setSnackbar({ open: true, text: "Select an opponent" });
       }
 
@@ -106,11 +106,10 @@ export default {
         });
       }
 
-
       this.$socket.emit("ask_bet", {
         game: "HEADS_OR_TAILS",
         amount: this.amount,
-        challengedId: this.selectedUser.props.socketId,
+        challengedId: this.selectedUser.props.id,
         challengerName: this.user.name,
       });
 
