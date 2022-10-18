@@ -17,10 +17,23 @@
             <span
               style="font-size: 13px; color: rgb(53, 56, 64) !important"
               class="mr-2 mt-4"
+              >announced per</span
+            >
+
+            <div class="d-flex align-center mb-8 mt-1">
+              <img width="28" src="../assets/coin.png" />
+              <span class="ml-1 mt-1">{{ announcement.valuePerItem }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column ml-6">
+            <span
+              style="font-size: 13px; color: rgb(53, 56, 64) !important"
+              class="mr-2 mt-4"
               >rarity</span
             >
 
-            <div class="d-flex align-center mb-8">
+            <div class="d-flex align-center mb-8 mt-1">
               <span class="ml-1 mt-1"> <rarity :item="item" /></span>
             </div>
           </div>
@@ -32,7 +45,7 @@
               >yield</span
             >
 
-            <div class="d-flex align-center mb-8">
+            <div class="d-flex align-center mb-8 mt-1">
               <img width="28" src="../assets/yield.png" />
               <span class="ml-1 mt-1">{{ item.yield }}</span>
             </div>
@@ -50,7 +63,7 @@ export default {
   components: { Rarity },
   name: "ItemDetailsModal",
 
-  props: ["item", "dialog"],
+  props: ["item", "dialog", "announcement"],
 
   watch: {
     dialog: {

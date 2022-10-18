@@ -69,6 +69,7 @@
 
     <item-details-modal
       :item="selectedItem"
+      :announcement="selectedAnnouncement"
       :dialog="dialog"
       @onclose="dialog = false"
     />
@@ -123,6 +124,7 @@ export default {
     },
     openMoreDetails(transaction) {
       this.selectedItem = transaction.announcement.props.item.props;
+      this.selectedAnnouncement = transaction.announcement.props;
       this.dialog = true;
     },
     answerNegociation(transaction, option) {

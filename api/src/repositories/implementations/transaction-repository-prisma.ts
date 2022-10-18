@@ -140,6 +140,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
                 status: transaction.status,
                 announcement: new Announcement({
                     id: transaction.announcement_id,
+                    valuePerItem: Number(transaction.announcement.value_per_item),
                     item: new Item({ id: item.id, imageUrl: item.image_url, name: item.name, yield: Number(item.yield), rarity: item.rarity, })
                 }),
                 fromUser: new User({
