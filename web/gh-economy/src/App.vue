@@ -114,7 +114,7 @@
       </div>
     </nav>
 
-    <div class="d-flex flex-column align-center justify-center mt-8" v-if="currentRoute !== 'Home'">
+    <div class="d-flex flex-column align-center justify-center mt-8" v-if="showRoute">
       <h1>{{ currentRoute }}</h1>
     </div>
 
@@ -265,6 +265,13 @@ export default {
   
   computed: {
     ...mapGetters(["loggedIn", "user", 'route']),
+    showRoute() {
+      if (this.currentRoute == 'Home' || this.currentRoute == 'Bets' || this.currentRoute == 'Game') {
+        return false;
+      }
+
+      return true;
+    },
     currentRoute() {
       if (!this.route) return '';
 
