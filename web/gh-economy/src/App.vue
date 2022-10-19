@@ -158,7 +158,7 @@ export default {
       this.playAudio("/received.mpeg");
     },
     redirect_to_game: function (betId) {
-      this.$router.push({ name: "bet_game", params: { id: betId } });
+      this.$router.push({ name: "game", params: { id: betId } });
 
       this.setCurrentBet({
         id: betId,

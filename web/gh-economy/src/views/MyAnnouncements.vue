@@ -156,7 +156,7 @@ export default {
       if (!item.pendingTradesCount) return;
 
       this.$router.push({
-        name: "trades",
+        name: "proposals",
         query: { announcementId: item.announcementId },
       });
     },

@@ -28,7 +28,7 @@ const router = createRouter({
     },
     {
       path: '/trades',
-      name: 'trades',
+      name: 'proposals',
       component: () => import('../views/PendingTransactions.vue'),
       beforeEnter: (guard, from, next) => canActive(guard, from, next),
     },
@@ -46,7 +46,7 @@ const router = createRouter({
     },
     {
       path: '/game/:id',
-      name: 'bet_game',
+      name: 'game',
       component: () => import('../views/BetGameView.vue'),
       beforeEnter: (guard, from, next) => canActive(guard, from, next),
     },
