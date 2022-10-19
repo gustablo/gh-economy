@@ -2,6 +2,9 @@ import { createStore } from 'vuex';
 
 export const store = createStore({
   getters: {
+    route(state) {
+      return state.route;
+    },
     user(state) {
       return state.user;
     },
@@ -20,6 +23,7 @@ export const store = createStore({
       user: {},
       loggedIn: false,
       currentBet: {},
+      route: '',
       snackbar: {
         open: false,
         text: '',
@@ -39,6 +43,9 @@ export const store = createStore({
     },
     setSnackbar(state, snackbar) {
       state.snackbar = { ...state.snackbar, ...snackbar };
+    },
+    setRoute(state, route) {
+      state.route = route;
     }
   }
 });

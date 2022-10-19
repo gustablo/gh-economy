@@ -63,8 +63,15 @@ export class UserItemPrismaRepository implements UserItemRepository {
                             where: {
                                 user_id: userId,
                                 status: 'OPEN',
+                            },
+                            include: {
+                                transactions: {
+                                    where: {
+                                        status: 'PENDING',
+                                    }
+                                }
                             }
-                        }
+                        },
                     }
                 },
             },
@@ -89,7 +96,10 @@ export class UserItemPrismaRepository implements UserItemRepository {
                 buyedPer: Number(buyed_per),
             });
 
-            return { ...userItem.props, announcementId: item.announcements?.length ? item.announcements[0].id : undefined };
+            const announcement = item.announcements[0];
+            const pendingTradesCount = announcement ? announcement.transactions?.length : 0;
+
+            return { ...userItem.props, announcementId: announcement?.id, announcementPrice: Number(announcement?.value_per_item), pendingTradesCount };
         })
     }
 

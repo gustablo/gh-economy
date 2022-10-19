@@ -1,20 +1,28 @@
 <template>
   <div
-    class="d-flex flex-wrap wallet-cards mt-12 ml-12 justify-center mb-16"
+    class="
+      d-flex
+      flex-wrap
+      my-announcements-cards
+      mt-12
+      ml-12
+      justify-center
+      mb-16
+    "
     v-if="!fetching && userItems.length"
   >
     <v-card
       v-for="(item, i) in items"
       :key="item.id"
-      class="wallet-card d-flex flex-column align-center"
+      class="my-announcements-card d-flex flex-column align-center"
     >
       <div
-        class="img-card-wallet"
+        class="img-card-my-announcements"
         :style="{ 'background-image': 'url(' + item.imageUrl + ')' }"
       ></div>
 
       <v-card-actions
-        class="d-flex flex-column wallet-actions-card align-start"
+        class="d-flex flex-column my-announcements-actions-card align-start"
       >
         <b>{{ item.name }}</b>
 
@@ -23,12 +31,12 @@
             <span
               style="font-size: 13px; color: rgb(53, 56, 64) !important"
               class="mr-2 mt-4"
-              >buyed per</span
+              >announced per</span
             >
 
             <div class="d-flex align-center mb-8">
               <img width="28" src="../assets/coin.png" />
-              <span class="ml-1 mt-1">{{ item.buyedPer }}</span>
+              <span class="ml-1 mt-1">{{ item.announcementPrice }}</span>
             </div>
           </div>
 
@@ -49,30 +57,29 @@
         <rarity :item="item" />
 
         <v-btn
-          style="width: 100%;"
-          class="mt-4 btn-sell"
-          @click="openSellModal(item)"
-          v-if="!item.announcementId"
-          >sell</v-btn
-        >
-        <v-btn
-          style="width: 100%; background-color: #F44336 !important"
-          class="mt-4 btn-sell"
+          style="background-color: #f44336 !important"
+          class="mt-4 btn-my-announcement"
           @click="() => cancelAnnouncement(item, i)"
-          v-else
-          >
-          <v-progress-circular size="24" width="3" v-if="loading == i" indeterminate></v-progress-circular>
-          <span v-else>cancel announcement</span>
-          </v-btn
         >
+          <v-progress-circular
+            size="24"
+            width="3"
+            v-if="loading == i"
+            indeterminate
+          ></v-progress-circular>
+          <span v-else>cancel</span>
+        </v-btn>
+
+        <v-btn
+          style="right: 0; left: auto; background-color: "
+          class="mt-4 btn-my-announcement"
+          @click="() => seeProposals(item, i)"
+          :disabled="!item.pendingTradesCount"
+        >
+          <span>{{ proposalText(item) }} </span>
+        </v-btn>
       </v-card-actions>
     </v-card>
-    <sell-modal
-      :dialog="dialog"
-      :item="selectedItem"
-      @onclose="dialog = false; loading = -1"
-      @onsell="fetchMyItems()"
-    />
   </div>
 
   <div
@@ -92,20 +99,18 @@
     style="height: 100%"
     class="d-flex align-center justify-center"
   >
-    <span>Nothing here, you can buy items in the shopping</span>
+    <span>Nothing here, you can announce items accessing your wallet</span>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import { cancelAnnouncement } from '../api/announcement';
+import { cancelAnnouncement } from "../api/announcement";
 import { myItems } from "../api/item";
-import SellModal from "../components/SellModal.vue";
 import Rarity from "../components/shared/Rarity.vue";
 
 export default {
   components: {
-    SellModal,
     Rarity,
   },
   data() {
@@ -126,38 +131,60 @@ export default {
     ...mapGetters(["user"]),
 
     items() {
-      return this.userItems.map((userItem) => {
-        const item = userItem.item.props;
+      return this.userItems
+        .map((userItem) => {
+          const item = userItem.item.props;
 
-        return {
-          ...item,
-          ...userItem,
-        };
-      });
+          return {
+            ...item,
+            ...userItem,
+          };
+        })
+        .filter((item) => item.announcementId)
+        .sort((a, b) => b.pendingTradesCount - a.pendingTradesCount);
     },
   },
 
   methods: {
-    ...mapMutations(['setSnackbar']),
+    ...mapMutations(["setSnackbar"]),
     fetchMyItems() {
       myItems(this.user.id)
         .then((result) => (this.userItems = result))
         .finally(() => (this.fetching = false));
     },
-    openSellModal(item) {
-      this.selectedItem = item;
-      this.dialog = true;
+    seeProposals(item) {
+      if (!item.pendingTradesCount) return;
+
+      this.$router.push({
+        name: "trades",
+        query: { announcementId: item.announcementId },
+      });
+    },
+    proposalText(item) {
+      if (!item.pendingTradesCount) {
+        return "no proposals yet";
+      }
+
+      if (item.pendingTradesCount == 1) {
+        return `${item.pendingTradesCount} proposal`;
+      }
+
+      return `${item.pendingTradesCount} proposals`;
     },
     cancelAnnouncement(item, i) {
       this.loading = i;
-  
+
       cancelAnnouncement(item.announcementId)
         .then(() => {
           this.fetchMyItems();
-          this.setSnackbar({ open: true, color: 'success', text: 'Announcement canceled successfully' });
+          this.setSnackbar({
+            open: true,
+            color: "success",
+            text: "Announcement canceled successfully",
+          });
         })
-        .finally(() => (this.loading = -1))
-    }
+        .finally(() => (this.loading = -1));
+    },
   },
 };
 </script>
@@ -170,18 +197,18 @@ export default {
   font-weight: bold;
 }
 
-.wallet-cards {
+.my-announcements-cards {
   gap: 60px;
 }
 
-.wallet-card {
+.my-announcements-card {
   width: 350px;
   box-shadow: rgb(0 0 0 / 8%) 0px 4px 15px;
   position: relative;
   border-radius: 10px;
 }
 
-.img-card-wallet {
+.img-card-my-announcements {
   width: 100%;
   height: 400px;
   position: relative;
@@ -189,7 +216,7 @@ export default {
   background-repeat: no-repeat;
 }
 
-.wallet-actions-card {
+.my-announcements-actions-card {
   row-gap: 12px;
   width: 90%;
   margin-top: 16px;
@@ -199,7 +226,7 @@ export default {
   width: 100%;
 }
 
-.btn-sell {
+.btn-my-announcement {
   transform: translateY(100%);
   transition: 0.3s;
   position: absolute;
@@ -207,14 +234,15 @@ export default {
   background-color: rgb(32, 129, 226);
   color: white;
   left: 0;
+  width: 50%;
   border-radius: 0;
 }
 
-.wallet-card:hover .btn-sell {
+.my-announcements-card:hover .btn-my-announcement {
   transform: translateY(0);
 }
 
-.wallet-img {
+.my-announcements-img {
   position: absolute;
   inset: 0px;
   box-sizing: border-box;

@@ -125,7 +125,7 @@ export class TransactionPrismaRepository implements TransactionRepository {
             },
             where: {
                 ...conditions,
-                to_id: conditions.to_id ? Number(conditions.to_id) : undefined
+                to_id: conditions.to_id ? Number(conditions.to_id) : undefined,
             },
         });
 

@@ -12,8 +12,12 @@ export const confirm = async (transactionId, decision) => {
     return response.data;
 };
 
-export const pendingTrades = async () => {
-    const response = await api.get('/trades/pending');
+export const pendingTrades = async (announcementId) => {
+    const response = await api.get('/trades/pending', {
+        params: {
+            announcementId,
+        }
+    });
 
     return response.data;
 };

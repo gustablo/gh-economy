@@ -1,6 +1,6 @@
 import { UserItemProps } from "../entities/user-item";
 
-export type MyItems = UserItemProps & { announcementId?: number };
+export type MyItems = UserItemProps & { announcementId?: number, announcementPrice?: number, pendingTradesCount: number };
 
 export interface UserItemRepository {
     findBy(conditions: any): Promise<UserItemProps | null>;

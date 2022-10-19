@@ -102,13 +102,6 @@ export default {
   cursor: pointer;
 }
 
-llet-card {
-  width: 350px;
-  box-shadow: rgb(0 0 0 / 8%) 0px 4px 15px;
-  position: relative;
-  border-radius: 10px;
-}
-
 .img-card-item {
   width: 100%;
   height: 400px;

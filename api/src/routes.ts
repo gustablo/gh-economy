@@ -47,7 +47,7 @@ routes.post('/trades/confirm', isAuthorized, async (req, res) => {
 });
 
 routes.get('/trades/pending', isAuthorized, async (req, res) => {
-    const result = await tradeController.pendingTrades(req.headers['authorization']!);
+    const result = await tradeController.pendingTrades(req.headers['authorization']!, req.query as any);
 
     return respond(result, res);
 });

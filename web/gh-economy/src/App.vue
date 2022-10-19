@@ -1,121 +1,122 @@
 <template>
   <v-app>
-    <nav>
-      <nav class="d-flex align-center nav" dense dark>
-        <v-toolbar-title class="nav-title">
-          <div
-            class="d-flex align-center super-title ml-4"
-            @click="$router.push({ name: 'home' })"
-          >
-            <div id="logo-container">
-              <img width="42" src="./assets/heads.png" class="logo-a" />
-              <img width="42" src="./assets/tails.png" class="logo-b" />
-            </div>
-            <router-link to="/" class="ml-4">GH Economy</router-link>
+    <nav class="d-flex align-center nav" dense dark>
+      <v-toolbar-title class="nav-title">
+        <div class="d-flex align-center super-title ml-4">
+          <div id="logo-container" @click="$router.push({ name: 'home' })">
+            <img width="42" src="./assets/heads.png" class="logo-a" />
+            <img width="42" src="./assets/tails.png" class="logo-b" />
           </div>
-        </v-toolbar-title>
+          <router-link to="/" class="ml-4">GH Economy</router-link>
+        </div>
+      </v-toolbar-title>
 
-        <div class="d-flex links align-center">
-          <v-tooltip text="Your balance" location="bottom">
+      <div class="d-flex links align-center">
+        <v-tooltip text="Your balance" location="bottom">
+          <template v-slot:activator="{ props }">
+            <div
+              v-bind="props"
+              class="wallet-top d-flex align-center"
+              v-if="loggedIn"
+            >
+              <img width="28" src="./assets/coin.png" />
+              <span class="ml-2 mt-1">{{ wallet }}</span>
+            </div>
+          </template>
+        </v-tooltip>
+
+        <span v-if="loggedIn">
+          <v-tooltip text="Coming soon" location="bottom">
             <template v-slot:activator="{ props }">
-              <div
-                v-bind="props"
-                class="wallet-top d-flex align-center"
-                v-if="loggedIn"
-              >
-                <img width="28" src="./assets/coin.png" />
-                <span class="ml-2 mt-1">{{ wallet }}</span>
-              </div>
+              <a v-bind="props">Rankings</a>
             </template>
           </v-tooltip>
+        </span>
 
-          <span v-if="loggedIn">
-            <v-tooltip text="Coming soon" location="bottom">
-              <template v-slot:activator="{ props }">
-                <a v-bind="props">Rankings</a>
-              </template>
-            </v-tooltip>
-          </span>
+        <span v-if="loggedIn">
+          <router-link to="/bets">Bets</router-link>
+        </span>
 
-          <span v-if="loggedIn">
-            <router-link to="/bets">Bets</router-link>
-          </span>
+        <span v-if="loggedIn">
+          <v-tooltip text="Store" location="bottom">
+            <template v-slot:activator="{ props }">
+              <router-link to="/store">
+                <v-icon v-bind="props" size="28">mdi-cart-outline</v-icon>
+              </router-link>
+            </template>
+          </v-tooltip>
+        </span>
 
-          <span v-if="loggedIn">
-            <v-tooltip text="Shopping" location="bottom">
-              <template v-slot:activator="{ props }">
-                <router-link to="/store">
-                  <v-icon v-bind="props" size="28">mdi-cart-outline</v-icon>
+        <span v-if="loggedIn">
+          <v-tooltip text="Wallet" location="bottom">
+            <template v-slot:activator="{ props }">
+              <router-link to="/store">
+                <router-link to="/wallet">
+                  <v-icon size="28" v-bind="props">mdi-wallet-outline</v-icon>
                 </router-link>
-              </template>
-            </v-tooltip>
-          </span>
+              </router-link>
+            </template>
+          </v-tooltip>
+        </span>
 
-          <span v-if="loggedIn">
-            <v-tooltip text="Wallet" location="bottom">
-              <template v-slot:activator="{ props }">
-                <router-link to="/store">
-                  <router-link to="/wallet">
-                    <v-icon size="28" v-bind="props">mdi-wallet-outline</v-icon>
-                  </router-link>
-                </router-link>
-              </template>
-            </v-tooltip>
-          </span>
+        <span v-if="loggedIn">
+          <v-menu rounded :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <div v-bind="props">
+                <v-tooltip text="My account" location="bottom">
+                  <template v-slot:activator="{ props: tooltip }">
+                    <v-icon style="cursor: pointer" size="28" v-bind="tooltip"
+                      >mdi-account-circle-outline</v-icon
+                    >
+                  </template>
+                </v-tooltip>
+              </div>
+            </template>
+            <v-card>
+              <v-list>
+                <v-list-item>
+                  <div>
+                    <img
+                      width="100"
+                      style="border-radius: 50%"
+                      :src="user.avatarUrl"
+                      class="ml-3 mb-3 mt-2"
+                    />
+                  </div>
 
-          <span v-if="loggedIn">
-            <v-menu rounded :close-on-content-click="false">
-              <template v-slot:activator="{ props }">
-                <div v-bind="props">
-                  <v-tooltip text="My account" location="bottom">
-                    <template v-slot:activator="{ props: tooltip }">
-                      <v-icon style="cursor: pointer" size="28" v-bind="tooltip"
-                        >mdi-account-circle-outline</v-icon
-                      >
-                    </template>
-                  </v-tooltip>
-                </div>
-              </template>
-              <v-card>
-                <v-list>
-                  <v-list-item>
-                    <div>
-                      <img
-                        width="100"
-                        style="border-radius: 50%"
-                        :src="user.avatarUrl"
-                        class="ml-3 mb-3 mt-2"
-                      />
-                    </div>
+                  <div>
+                    <v-list-item-title>{{ user.name }}</v-list-item-title>
+                    <v-list-item-subtitle
+                      >Sir Lord of Coins</v-list-item-subtitle
+                    >
+                  </div>
+                </v-list-item>
+              </v-list>
 
-                    <div>
-                      <v-list-item-title>{{ user.name }}</v-list-item-title>
-                      <v-list-item-subtitle
-                        >Sir Lord of Coins</v-list-item-subtitle
-                      >
-                    </div>
-                  </v-list-item>
-                </v-list>
+              <v-divider></v-divider>
 
-                <v-divider></v-divider>
+              <v-list>
+                <v-list-item
+                  @click="$router.push({ name: 'my announcements' })"
+                >
+                  <v-list-item-title> My announcements </v-list-item-title>
+                </v-list-item>
 
-                <v-list>
-                  <v-list-item @click="$router.push({ name: 'trades' })">
-                    <v-list-item-title> Negociations </v-list-item-title>
-                  </v-list-item>
+                <v-list-item @click="logout">
+                  <v-list-item-title>Logout</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
+        </span>
 
-                  <v-list-item @click="logout">
-                    <v-list-item-title>Logout</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-card>
-            </v-menu>
-          </span>
-
-          <login-form />
-        </div>
-      </nav>
+        <login-form />
+      </div>
     </nav>
+
+    <div class="d-flex flex-column align-center justify-center mt-8" v-if="currentRoute !== 'Home'">
+      <h1>{{ currentRoute }}</h1>
+    </div>
 
     <v-main>
       <router-view />
@@ -149,13 +150,12 @@ export default {
       this.receiveChallengeModal = true;
       this.receiveChallengeBet = data;
 
-
       this.setCurrentBet({
         step: 0,
         id: data.betId,
       });
 
-      this.playAudio('/received.mpeg');
+      this.playAudio("/received.mpeg");
     },
     redirect_to_game: function (betId) {
       this.$router.push({ name: "bet_game", params: { id: betId } });
@@ -195,14 +195,13 @@ export default {
       });
     },
     you_win: function (amountWon) {
-      
       this.setCurrentBet({
         win: true,
         step: 4,
         amountWon,
       });
 
-      this.playAudio('/win.mpeg');
+      this.playAudio("/win.mpeg");
     },
     you_lose: function (amountLost) {
       this.setCurrentBet({
@@ -211,18 +210,22 @@ export default {
         amountLost,
       });
 
-      this.playAudio('/lose.mpeg');
+      this.playAudio("/lose.mpeg");
     },
     update_wallet: function (newBalance) {
       this.user.wallet.props.balance = newBalance;
       this.setUser(this.user);
 
-      this.setSnackbar({ color: 'success', text: 'Wallet updated', open: true });
+      this.setSnackbar({
+        color: "success",
+        text: "Wallet updated",
+        open: true,
+      });
     },
-    denied_game: function() {
-      this.emitter.emit('CLOSE_CHOOSE_MODAL');
-      this.setSnackbar({ color: 'error', text: 'Bet denied',  open: true });
-    }
+    denied_game: function () {
+      this.emitter.emit("CLOSE_CHOOSE_MODAL");
+      this.setSnackbar({ color: "error", text: "Bet denied", open: true });
+    },
   },
 
   data() {
@@ -245,11 +248,9 @@ export default {
   methods: {
     ...mapMutations(["setUser", "setLoggedIn", "setCurrentBet", "setSnackbar"]),
     playAudio(src) {
-
       const audio = new Audio(src);
 
-audio.crossOrigin = 'anonymous';
-
+      audio.crossOrigin = "anonymous";
 
       audio.play().then();
     },
@@ -261,8 +262,15 @@ audio.crossOrigin = 'anonymous';
       window.location.reload();
     },
   },
+  
   computed: {
-    ...mapGetters(["loggedIn", "user"]),
+    ...mapGetters(["loggedIn", "user", 'route']),
+    currentRoute() {
+      if (!this.route) return '';
+
+      return this.route.charAt(0).toUpperCase()
+        .concat(this.route.substr(1, this.route.length));
+    },
     wallet() {
       if (this.user.wallet) {
         return this.user.wallet.props.balance.toFixed(2);
@@ -283,6 +291,7 @@ audio.crossOrigin = 'anonymous';
   width: 42px;
   height: 42px;
   transition-delay: 5s;
+  cursor: pointer;
 }
 
 .super-title:hover > #logo-container {
@@ -328,10 +337,6 @@ audio.crossOrigin = 'anonymous';
 .links {
   gap: 40px;
   margin-right: 40px;
-}
-
-.super-title {
-  cursor: pointer;
 }
 
 .super-title a {

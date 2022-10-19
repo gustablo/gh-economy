@@ -17,7 +17,7 @@ export class CurrentUser {
         }
 
         const patrimony = user.userItems?.reduce((acc, cur) => {
-            return acc + cur.props.buyedPer * cur.props.quantity;
+            return acc + (cur.props.item?.props.yield! * 7);
         }, 0);
 
         user.patrimony = ( patrimony || 0 ) +  user.wallet?.props.balance!;

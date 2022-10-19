@@ -50,6 +50,12 @@ const router = createRouter({
       component: () => import('../views/BetGameView.vue'),
       beforeEnter: (guard, from, next) => canActive(guard, from, next),
     },
+    {
+      path: '/announcements/me',
+      name: 'my announcements',
+      component: () => import('../views/MyAnnouncements.vue'),
+      beforeEnter: (guard, from, next) => canActive(guard, from, next),
+    },
   ]
 })
 
@@ -74,6 +80,7 @@ router.beforeEach(async (guard, from, next) => {
 
   }
 
+  store.commit('setRoute', guard.name);
   next();
 });
 

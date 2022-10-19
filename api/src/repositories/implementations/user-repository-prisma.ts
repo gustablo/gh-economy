@@ -34,7 +34,11 @@ export class UserPrismaRepository implements UserRepository {
     const user = await prisma.user.findFirst({
       include: {
         wallet: true,
-        user_items: true,
+        user_items: {
+          include: {
+            item: true,
+          }
+        },
       },
       where: {
         name,
@@ -64,6 +68,7 @@ export class UserPrismaRepository implements UserRepository {
         return new UserItem({
           quantity: userItem.quantity,
           buyedPer: Number(userItem.buyed_per),
+          item: new Item({ yield: Number(userItem.item.yield) })
         });
       }),
     };

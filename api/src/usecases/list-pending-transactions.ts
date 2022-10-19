@@ -6,9 +6,9 @@ export class ListPendingTransactions {
         private transactionRepository: TransactionRepository,
     ) {}
 
-    async exec(token: string) {
+    async exec(token: string, query: { announcementId: string }) {
         const user = await decodeToken(token);
 
-        return this.transactionRepository.list({ status: 'PENDING', to_id: user.id });
+        return this.transactionRepository.list({ status: 'PENDING', to_id: user.id, announcement_id: Number(query.announcementId) });
     }
 }

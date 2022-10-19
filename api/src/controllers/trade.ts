@@ -52,9 +52,9 @@ export class TradeController {
         }
     }
 
-    async pendingTrades(token: string): Promise<HttpResponse> {
+    async pendingTrades(token: string, query: { announcementId: string }): Promise<HttpResponse> {
         try {
-            const response = await this.pendingUseCase.exec(token);
+            const response = await this.pendingUseCase.exec(token, query);
 
             return commonSuccess(response);
         } catch(err) {

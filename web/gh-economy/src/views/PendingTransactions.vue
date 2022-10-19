@@ -92,7 +92,7 @@
     style="height: 100%"
     class="d-flex align-center justify-center"
   >
-    <b>Nothing here, you can announce items accessing your wallet</b>
+    <b>No proposal was made for this item</b>
   </div>
 </template>
 
@@ -118,7 +118,14 @@ export default {
   methods: {
     ...mapMutations(["setSnackbar"]),
     fetchPendingTrades() {
-      pendingTrades()
+      const { announcementId } = this.$route.query;
+
+      if (!announcementId) {
+        this.fetching = false;
+        return;
+      }
+
+      pendingTrades(announcementId)
         .then((result) => (this.transactions = result))
         .finally(() => (this.fetching = false));
     },

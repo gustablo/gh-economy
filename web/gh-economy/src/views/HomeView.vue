@@ -8,14 +8,34 @@
           <span class="ml-4 mt-1">{{ wallet.balance.toFixed(2) }}</span>
         </h2>
       </v-card>
-  
-      <v-card elevation="2" outlined shaped class="balance-card common-card pa-3">
-        <span class="ml-2 common-title">Patrimony</span>
-        <h2 class="text-center mt-3 d-flex align-center justify-center mr-10">
-          <img width="48" src="../assets/yield.png" />
-          <span class="ml-4 mt-1">{{ user.patrimony.toFixed(2) }}</span>
-        </h2>
-        </v-card>
+
+      <v-card
+        elevation="2"
+        outlined
+        shaped
+        class="balance-card common-card pa-3"
+      >
+        <v-tooltip text="Your balance plus sum of all your yields times seven" location="bottom">
+          <template v-slot:activator="{ props }">
+            <div v-bind="props">
+              <span class="ml-2 common-title">Patrimony</span>
+              <h2
+                class="
+                  text-center
+                  mt-3
+                  d-flex
+                  align-center
+                  justify-center
+                  mr-10
+                "
+              >
+                <img width="48" src="../assets/yield.png" />
+                <span class="ml-4 mt-1">{{ user.patrimony.toFixed(2) }}</span>
+              </h2>
+            </div>
+          </template>
+        </v-tooltip>
+      </v-card>
     </div>
 
     <v-card elevation="2" outlined shaped class="graph common-card mt-8 pa-3">
