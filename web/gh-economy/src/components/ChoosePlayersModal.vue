@@ -3,7 +3,7 @@
     <v-card style="border-radius: 10px !important">
       <h3 class="mb-6 ml-4 mt-4">Online players:</h3>
       <div style="padding: 0px 16px 16px 16px">
-        <div class="d-flex players-container">
+        <div class="d-flex players-container flex-wrap">
           <div
             class="d-flex align-center avatar-card flex-column"
             v-for="user in onlineUsers"

@@ -1,8 +1,5 @@
 <template>
   <div class="d-flex flex-column align-start">
-    <span
-      >Sold by <b>{{ announcement.user.props.name }}</b></span
-    >
 
     <div class="d-flex">
       <div class="d-flex flex-column">
