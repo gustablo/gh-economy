@@ -111,8 +111,12 @@ routes.post('/daily-yields', async (_, res) => {
         }
     });
 
+    const yields = [];
+
     for (const user of allUsers) {
         const items = user.user_items.map(userItem => userItem.item);
+
+        console.log(items);
 
         const allYields = items.reduce((acc, item) => {
             acc += Number(item.yield);
@@ -127,9 +131,16 @@ routes.post('/daily-yields', async (_, res) => {
                 balance: Number(user.wallet.balance) + Number(allYields),
             }
         });
+
+        yields.push({
+            user: user.name,
+            oldBalance: Number(user.wallet.balance),
+            yields: Number(allYields),
+            newBalance: Number(user.wallet.balance) + Number(allYields)
+        })
     }
 
-    return res.json({ ok: true }).status(200);
+    return res.json(yields).status(200);
 });
 
 const respond = (result: HttpResponse, res: Response) => {
