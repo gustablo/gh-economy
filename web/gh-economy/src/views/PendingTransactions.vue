@@ -152,8 +152,8 @@ export default {
           text: snackbarMessages[option],
         });
 
-        transaction.loading = false;
-      });
+        return this.$router.push({ name: 'my announcements' });
+      }).finally(() => transaction.loading = false)
     },
   },
 };
