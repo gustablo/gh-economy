@@ -1,9 +1,11 @@
 <template>
   <v-card class="item-card d-flex flex-column align-center">
-    <div
-      class="img-card-item"
-      :style="{ 'background-image': 'url(' + item.imageUrl + ')' }"
-    ></div>
+    <div class="img-card-item inline-block">
+      <div
+        class="img-card-item block"
+        :style="{ 'background-image': 'url(' + item.imageUrl + ')' }"
+      ></div>
+    </div>
 
     <v-card-actions class="d-flex flex-column item-actions-card align-start">
       <b>{{ item.name }}</b>
@@ -98,8 +100,19 @@ export default {
   border-radius: 10px;
 }
 
-.item-card:hover {
-  cursor: pointer;
+.inline-block {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.block {
+  display: block;
+  transition: transform .4s;
+}
+
+.item-card:hover .block {
+  transform: scale(1.15);
+  transform-origin: 50% 50%;
 }
 
 .img-card-item {

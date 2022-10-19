@@ -8,10 +8,13 @@
       :key="item.id"
       class="wallet-card d-flex flex-column align-center"
     >
+      <div class="img-card-wallet inline-block">
+
       <div
-        class="img-card-wallet"
+        class="img-card-wallet block"
         :style="{ 'background-image': 'url(' + item.imageUrl + ')' }"
       ></div>
+      </div>
 
       <v-card-actions
         class="d-flex flex-column wallet-actions-card align-start"
@@ -179,6 +182,21 @@ export default {
   box-shadow: rgb(0 0 0 / 8%) 0px 4px 15px;
   position: relative;
   border-radius: 10px;
+}
+
+.inline-block {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.block {
+  display: block;
+  transition: transform .4s;
+}
+
+.wallet-card:hover .block {
+  transform: scale(1.15);
+  transform-origin: 50% 50%;
 }
 
 .img-card-wallet {

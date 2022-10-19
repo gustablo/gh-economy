@@ -116,8 +116,6 @@ routes.post('/daily-yields', async (_, res) => {
     for (const user of allUsers) {
         const items = user.user_items.map(userItem => userItem.item);
 
-        console.log(items);
-
         const allYields = items.reduce((acc, item) => {
             acc += Number(item.yield);
             return acc;
