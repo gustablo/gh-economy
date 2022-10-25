@@ -58,6 +58,7 @@ export class UserController {
 
             return commonSuccess(result);
         } catch (err) {
+            console.log(err);
             return commonError(err as Error);
         }
     }
