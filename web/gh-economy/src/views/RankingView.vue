@@ -34,7 +34,16 @@
     </div>
 
     <v-table style="width: 60%" class="mt-8">
-      <thead>
+      <div class="d-flex justify-center align-center mt-8" v-if="loading">
+        <v-progress-circular
+          width="6"
+          size="100"
+          indeterminate
+        ></v-progress-circular>
+
+      </div>
+
+      <thead v-else>
         <tr>
           <th class="text-left">Name</th>
           <th class="text-left">Yield</th>
@@ -61,6 +70,7 @@ import { riches } from "../api/user";
 export default {
   data() {
     return {
+      loading: true,
       users: [],
       endsAt: new Date("2022-11-28"),
       showHours: null,
@@ -86,7 +96,7 @@ export default {
 
     riches().then(
       (result) => (this.users = this.countFields(result.map((r) => r.props)))
-    );
+    ).finally(() => this.loading = false)
   },
 
   methods: {
