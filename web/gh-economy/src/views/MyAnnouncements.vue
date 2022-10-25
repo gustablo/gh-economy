@@ -9,7 +9,7 @@
       justify-center
       mb-16
     "
-    v-if="!fetching && userItems.length"
+    v-if="!fetching && items.length"
   >
     <v-card
       v-for="(item, i) in items"
@@ -94,8 +94,9 @@
     ></v-progress-circular>
   </div>
 
+
   <div
-    v-else-if="!userItems.length"
+    v-else-if="!items.length"
     style="height: 100%"
     class="d-flex align-center justify-center"
   >
