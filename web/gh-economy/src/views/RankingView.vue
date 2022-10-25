@@ -79,7 +79,7 @@ export default {
 
   mounted() {
     let interval = setInterval(() => {
-      const diff = this.endsAt.getTime() - new Date();
+      const diff = this.endsAt.getTime() - new Date().getTime();
       const diffAsDate = new Date(diff);
 
       const hours = this.twoDigits(diffAsDate.getHours());
@@ -87,8 +87,7 @@ export default {
       const seconds = this.twoDigits(diffAsDate.getSeconds());
 
       this.showHours = `${hours}:${minutes}:${seconds}`;
-
-      if (hours <= 0 && minutes <= 0 && seconds <= 0) {
+      if ((hours <= 0 && minutes <= 0 && seconds <= 0) || (this.endsAt >= new Date())) {
         clearInterval(interval);
         this.showHours = "Event end";
       }
