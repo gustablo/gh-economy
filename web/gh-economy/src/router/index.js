@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { store } from '../store';
-import { current } from '../api/auth';
 import HomeView from '../views/HomeView.vue'
+import { store } from '../store';
 import { isEmpty } from 'lodash';
+import { canActive } from './can-active';
+import { execBeforeEach } from './before-each';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,32 +57,15 @@ const router = createRouter({
       component: () => import('../views/MyAnnouncements.vue'),
       beforeEnter: (guard, from, next) => canActive(guard, from, next),
     },
+    {
+      path: '/rankings',
+      name: 'rankings',
+      component: () => import('../views/RankingView.vue'),
+      beforeEnter: (guard, from, next) => canActive(guard, from, next),
+    },
   ]
 })
 
-const canActive = (guard, from, next) =>{
-  if (!localStorage.getItem('token')) return next({ path: from.path });
+execBeforeEach(router);
 
-  return next();
-}
-
-router.beforeEach(async (guard, from, next) => {
-  const token = localStorage.getItem('token');
-  const user = store.state.user;
-
-  if (token && isEmpty(user)) {
-    try {
-      const response = await current();
-      store.commit('setUser', response);
-    } catch (err) {
-      localStorage.removeItem('token');
-      return next({ name: 'home' });
-    }
-
-  }
-
-  store.commit('setRoute', guard.name);
-  next();
-});
-
-export default router
+export default router;

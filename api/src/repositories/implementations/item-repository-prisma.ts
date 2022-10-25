@@ -1,10 +1,14 @@
-import { Announcement } from "../../entities/announcement";
-import { Item } from "../../entities/item";
 import { User } from "../../entities/user";
 import { ItemRepository, ItemWithAnnouncements } from "../item-repository";
+import { AnnouncementPrismaMapper } from "../mappers/announcement-prisma";
+import { ItemPrismaMapper } from "../mappers/item-prisma";
 import { prisma } from "./prisma";
 
 export class ItemPrismaRepository implements ItemRepository {
+
+    private mapper = new ItemPrismaMapper();
+    private announcementMapper = new AnnouncementPrismaMapper();
+
     async addItems(userId: string, itemId: number, quantityItemsAsked: number, buyedPer: number): Promise<void> {
         const userItem = await prisma.user_items.findFirst({
             where: {
@@ -18,7 +22,7 @@ export class ItemPrismaRepository implements ItemRepository {
                 where: { id: userItem.id },
                 data: {
                     quantity: userItem.quantity + quantityItemsAsked,
-                    buyed_per: buyedPer, //TODO: trocar para preco médio
+                    buyed_per: buyedPer,
                 }
             });
 
@@ -62,24 +66,16 @@ export class ItemPrismaRepository implements ItemRepository {
             }
         });
 
-        return items.map(item => ({
-            id: item.id,
-            imageUrl: item.image_url,
-            name: item.name,
-            yield: Number(item.yield),
-            rarity: item.rarity,
-            announcements: item.announcements.map(announcement => {
-                const instance = new Announcement({
-                    id: announcement.id,
-                    quantityAvailable: announcement.quantity_available,
-                    status: announcement.status,
-                    valuePerItem: Number(announcement.value_per_item),
-                    user: new User({ id: announcement.user_id.toString() })
-                });
+        const mapped = this.mapper.toModelCollection(items);
 
-                return instance.props;
-            })
-        }));
+        return mapped.map((item, i) => {
+            const announcements = items[i].announcements;
+
+            return {
+                ...item.props,
+                announcements: this.announcementMapper.toModelCollection(announcements).map(an => an.props)
+            }
+        });
     }
 
     async findBy(conditions: any): Promise<ItemWithAnnouncements | null> {
@@ -105,24 +101,11 @@ export class ItemPrismaRepository implements ItemRepository {
 
         if (!item) return null;
 
+        const { props } = this.mapper.toModel(item);
+
         return {
-            id: item.id,
-            name: item.name,
-            imageUrl: item.image_url,
-            yield: Number(item.yield),
-            rarity: item.rarity,
-            announcements: item.announcements.map(announcement => ({
-                id: announcement.id,
-                status: announcement.status,
-                quantityAvailable: announcement.quantity_available,
-                valuePerItem: Number(announcement.value_per_item),
-                item: new Item({ id: item.id }),
-                user: new User({
-                    id: announcement.user.id.toString(),
-                    name: announcement.user.name,
-                    role: announcement.user.role,
-                }),
-            }))
+            ...props,
+            announcements: this.announcementMapper.toModelCollection(item.announcements).map(an => an.props),
         }
     }
 }

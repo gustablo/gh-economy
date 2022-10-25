@@ -1,11 +1,11 @@
-import { Item } from "../../entities/item";
 import { User, UserProps } from "../../entities/user";
-import { UserItem } from "../../entities/user-item";
-import { Wallet } from "../../entities/wallet";
+import { UserPrismaMapper } from "../mappers/user-prisma";
 import { UserRepository } from "../user-repository";
 import { prisma } from "./prisma";
 
 export class UserPrismaRepository implements UserRepository {
+  private mapper = new UserPrismaMapper();
+
   async create(
     user: Omit<UserProps, "wallet">,
     walletId: string
@@ -19,13 +19,9 @@ export class UserPrismaRepository implements UserRepository {
       },
     });
 
-    return {
-      id: created.id.toString(),
-      name: created.name,
-      role: created.role,
-      password: created.password,
-      wallet: undefined,
-    };
+    const { props } = this.mapper.toModel(created);
+
+    return props;
   }
 
   async findBy(conditions: any): Promise<UserProps | null> {
@@ -52,26 +48,9 @@ export class UserPrismaRepository implements UserRepository {
 
     if (!user) return null;
 
-    return {
-      id: user.id.toString(),
-      name: user.name,
-      role: user.role,
-      password: user.password,
-      socketId: user.socket_id,
-      avatarUrl: user.avatar_url,
-      status: user.status,
-      wallet: new Wallet({
-        id: user.wallet?.id?.toString(),
-        balance: parseFloat(user.wallet?.balance?.toString()),
-      }),
-      userItems: user.user_items.map((userItem) => {
-        return new UserItem({
-          quantity: userItem.quantity,
-          buyedPer: Number(userItem.buyed_per),
-          item: new Item({ yield: Number(userItem.item.yield) })
-        });
-      }),
-    };
+    const { props } = this.mapper.toModel(user);
+
+    return props;
   }
 
   async update(user: Partial<UserProps>, userId: number): Promise<void> {
@@ -103,12 +82,33 @@ export class UserPrismaRepository implements UserRepository {
       }
     });
 
-    return users.map(user => (new User({
-      name: user.name,
-      avatarUrl: user.avatar_url,
-      status: user.status,
-      id: user.id.toString(),
-      socketId: user.socket_id,
-    })));
+    const mapped = this.mapper.toModelCollection(users);
+
+    return mapped;
+  }
+
+  async listRiches(): Promise<User[]> {
+    const users = await prisma.user.findMany({
+      include: {
+        user_items: {
+          include: {
+            item: true,
+          },
+        },
+        wallet: true,
+      },
+      orderBy: {
+        wallet: {
+          balance: 'desc'
+        }
+      },
+      where: {
+        role: {
+          not: 'GOVERNMENT'
+        }
+      }
+    });
+
+    return this.mapper.toModelCollection(users);
   }
 }

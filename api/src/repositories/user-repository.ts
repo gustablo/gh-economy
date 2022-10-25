@@ -6,4 +6,5 @@ export interface UserRepository {
     update(user: Partial<UserProps>, userId: number): Promise<void>;
     updateBySocketId(user: Partial<UserProps>, socketId: string): Promise<void>;
     listOnline(userId: number): Promise<User[]>;
+    listRiches(): Promise<User[]>;
 }

@@ -1,9 +1,12 @@
-import { TransactionProps } from "../../entities/transaction";
 import { WalletProps } from "../../entities/wallet";
+import { WalletPrismaMapper } from "../mappers/wallet-prisma";
 import { WalletRepository } from "../wallet-repository";
 import { prisma } from "./prisma";
 
 export class WalletPrismaRepository implements WalletRepository {
+
+    private mapper = new WalletPrismaMapper();
+
 
     async create(wallet: WalletProps): Promise<WalletProps> {
         const created = await prisma.wallet.create({
@@ -12,10 +15,9 @@ export class WalletPrismaRepository implements WalletRepository {
             },
         });
 
-        return {
-            id: created.id.toString(),
-            balance: parseFloat(created.balance.toString()),
-        }
+        const { props } = this.mapper.toModel(created);
+
+        return props;
     }
 
     async update(walletId: string, amount: number): Promise<WalletProps | null> {
@@ -30,10 +32,8 @@ export class WalletPrismaRepository implements WalletRepository {
 
         if (!updated) return null;
 
-        return {
-            id: updated.id.toString(),
-            balance: parseFloat(updated.balance.toString()),
-        }
-    }
+        const { props } = this.mapper.toModel(updated);
 
+        return props;
+    }
 }

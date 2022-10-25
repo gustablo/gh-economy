@@ -1,4 +1,3 @@
-import { User } from "../entities/user";
 import { UserPrismaRepository } from "../repositories/implementations/user-repository-prisma";
 import { WalletPrismaRepository } from "../repositories/implementations/wallet-repository-prisma";
 import { HttpResponse } from "../shared/contracts/http-response";
@@ -9,7 +8,7 @@ import { SignupRequestDTO } from "../dtos/signup";
 import { SigninRequestDTO } from "../dtos/signin";
 import { CurrentUser } from "../usecases/current-user";
 import { OnlineUsers } from "../usecases/online-users";
-import { Socket } from "socket.io";
+import { MoreRiches } from "../usecases/more-riches";
 
 export class UserController {
 
@@ -17,6 +16,7 @@ export class UserController {
     private siginUseCase = new Signin(this.userRepo);
     private currentUseCase = new CurrentUser(this.userRepo);
     private onlineUseCase = new OnlineUsers(this.userRepo);
+    private moreRiches = new MoreRiches(this.userRepo);
     private signupUseCase = new Signup(
         this.userRepo,
         new WalletPrismaRepository(),
@@ -55,6 +55,16 @@ export class UserController {
     async listOnline(token: string): Promise<HttpResponse> {
         try {
             const result = await this.onlineUseCase.exec(token);
+
+            return commonSuccess(result);
+        } catch (err) {
+            return commonError(err as Error);
+        }
+    }
+
+    async listMoreRiches(): Promise<HttpResponse> {
+        try {
+            const result = await this.moreRiches.exec();
 
             return commonSuccess(result);
         } catch (err) {

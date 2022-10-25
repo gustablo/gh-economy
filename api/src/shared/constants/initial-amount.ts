@@ -1,1 +1,1 @@
-export const INITIAL_AMOUNT = 20;
+export const INITIAL_AMOUNT = 400;

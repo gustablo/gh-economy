@@ -5,3 +5,9 @@ export const fetchOnlineUsers = async () => {
 
     return result.data;
 }
+
+export const riches = async () => {
+    const result = await api.get('/users/riches');
+
+    return result.data;
+}

@@ -26,11 +26,7 @@
         </v-tooltip>
 
         <span v-if="loggedIn">
-          <v-tooltip text="Coming soon" location="bottom">
-            <template v-slot:activator="{ props }">
-              <a v-bind="props">Rankings</a>
-            </template>
-          </v-tooltip>
+            <router-link to="/rankings">Rankings</router-link>
         </span>
 
         <span v-if="loggedIn">

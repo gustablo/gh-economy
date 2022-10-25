@@ -1,6 +1,5 @@
 import { Response, Router } from 'express';
 import { AnnouncementController } from './controllers/announcement';
-import { BetController } from './controllers/bet';
 import { ItemController } from './controllers/item';
 import { TradeController } from './controllers/trade';
 import { UserController } from './controllers/user';
@@ -14,7 +13,6 @@ const userController = new UserController();
 const tradeController = new TradeController();
 const announcementController = new AnnouncementController();
 const itemController = new ItemController();
-const betController = new BetController();
 
 routes.post('/sign-up', async (req, res) => {
     const result = await userController.sigup(req.body);
@@ -82,17 +80,17 @@ routes.get('/items/:id/announcements', async (req, res) => {
     return respond(result, res);
 });
 
-routes.post('/bets', isAuthorized, async (req, res) => {
-    const result = await betController.makeBet(req.body, req.headers['authorization']!);
-
-    return respond(result, res);
-});
-
 routes.get('/users/online', isAuthorized, async (req, res) => {
     const result = await userController.listOnline(req.headers['authorization']!);
 
     return respond(result, res);
-})
+});
+
+routes.get('/users/riches', isAuthorized, async (req, res) => {
+    const result = await userController.listMoreRiches();
+
+    return respond(result, res);
+});
 
 routes.post('/daily-yields', async (_, res) => {
     const allUsers = await prisma.user.findMany({
@@ -101,11 +99,6 @@ routes.post('/daily-yields', async (_, res) => {
                 include: {
                     item: true,
                 },
-                where: {
-                    quantity: {
-                        gt: 0,
-                    }
-                }
             },
             wallet: true,
         }

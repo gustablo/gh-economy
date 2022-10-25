@@ -1,21 +1,19 @@
 import { Item } from "../../entities/item";
 import { UserItem, UserItemProps } from "../../entities/user-item";
+import { UserItemPrismaMapper } from "../mappers/user-item-prisma";
 import { MyItems, UserItemRepository } from "../user-item-repository";
 import { prisma } from "./prisma";
 
 export class UserItemPrismaRepository implements UserItemRepository {
+
+    private mapper = new UserItemPrismaMapper();
+
     async findBy(conditions: any): Promise<UserItemProps | null> {
         const userItem = await prisma.user_items.findFirst({ where: conditions });
 
         if (!userItem) return null;
 
-        return {
-            id: userItem.id,
-            itemId: userItem.item_id,
-            userId: userItem.user_id,
-            quantity: userItem.quantity,
-            buyedPer: Number(userItem.buyed_per),
-        }
+        return this.mapper.toModel(userItem).props;
     }
 
     async removeItems(userId: number, itemId: number, quantityToRemove: number): Promise<void> {
